@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Plan = require('./plan')
 
 const userSchema = new mongoose.Schema({
   name:{
@@ -19,8 +20,12 @@ const userSchema = new mongoose.Schema({
   ployos:{
     type: Boolean
   },
-  cardio: Boolean
-})
+  cardio: Boolean//,
+  // plans: [{
+  //   ref plan
+  //   'Plan'
+  // }]
+}
 
 const User = mongoose.model('User', userSchema)
 module.exports = User

@@ -3,9 +3,29 @@
 <div class="container">
 <h2>Shreddit</h2>
 <p class="lead">Description comming soon!</p>
+
 <div class="card-body">
 
-<form action="/shreddit" method="POST">
+<h1>Log In</h1>
+<form action="/shreddit/login" method="POST">
+<div class="form-group">
+
+<div class="form-group">
+<input type="text" name="email"  placeholder="Email" class="form-control" required>
+</div>
+<div class="form-group">
+<input type="password" name="passowrd"  placeholder="Password" class="form-control">
+</div>
+ 
+<button class="btn btn-primary mt-3 " type="submit">Login</button>
+
+<br/>
+</form>
+
+<h3>Not Signed Up? Register Here!</h3>
+<div class="card-body">
+
+<form action="/shreddit/register" method="POST">
 <div class="form-group">
 <div class="form-group">
 <input type="text" name="name"  placeholder="Name" class="form-control" required>
@@ -14,7 +34,7 @@
 <input type="text" name="email"  placeholder="Email" class="form-control" required>
 </div>
 <div class="form-group">
-<input type="text" name="passowrd"  placeholder="Password" class="form-control">
+<input type="password" name="passowrd"  placeholder="Password" class="form-control">
 </div>
  <div class="form-check">
     <input type="checkbox" class="form-check-input" id=weights>
@@ -28,7 +48,7 @@
     <input type="checkbox" class="form-check-input" id="cardio">
     <label class="form-check-label" for="exampleCheck1">Cardiovascular</label>
   </div>
-<button class="btn btn-primary mt-3 " type="submit">Login</button>
+<button class="btn btn-primary mt-3 " type="submit">Register</button>
 
 </form>
 
