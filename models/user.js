@@ -3,16 +3,16 @@ const Plan = require('./plan')
 
 const userSchema = new mongoose.Schema({
   name:{
-      type: String,
-      required: true
+      type: String
+      // required: true
   },
   email:{
-    type: String,
-    required: true
+    type: String
+    // required: true
   },
   password:{
-    type: String,
-    required: true
+    type: String
+    // required: true
   },
   weights:{
     type: Boolean
@@ -20,12 +20,13 @@ const userSchema = new mongoose.Schema({
   ployos:{
     type: Boolean
   },
-  cardio: Boolean//,
+  cardio: {
+  type: Boolean//,
   // plans: [{
   //   ref plan
   //   'Plan'
   // }]
-}
+}});
 
 const User = mongoose.model('User', userSchema)
 module.exports = User

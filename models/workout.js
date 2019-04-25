@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const workoutSchema = new mongoose.Schema({
 
   name: {
-    name:String,
+    type: String,
     required: true
   },
 
   type:{
-    name: String,
+   	type: String,
     required: true
   },
 

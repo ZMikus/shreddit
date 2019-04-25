@@ -10,15 +10,18 @@ const planSchema = new mongoose.Schema({
   		type: Boolean,
   		required: true
 	},
-	name: String,
+	name: {
+		type: String,
+		required: true
+	},
 	user: {//should this be user or user's focus?
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
-	activities: {[
+	activities: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Workout'
-	]}
+	}]
 });
 
 const Plan = mongoose.model('Plan', planSchema)

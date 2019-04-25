@@ -19,12 +19,19 @@ app.use(session({
 }));
 
 //controllers
+const authController = require('./controllers/authController');
+const shredditController = require('./controllers/shreddit');
+// const userController = require('./controllers/user')
+
+app.use('/login', authController);
+app.use('/shreddit', shredditController);
+// app.use('/user', userController);
 
 
 
 
 app.get('/', (req, res) => {
-  res.render('login.ejs')
+  res.render('home.ejs')
 })
 
 
