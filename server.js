@@ -18,8 +18,14 @@ app.use(session({
   resave: false
 }));
 
-//controller
+//controllers
 
+
+
+
+app.get('/', (req, res) => {
+  res.render('index.ejs')
+})
 
 
 

@@ -19,9 +19,7 @@ const userSchema = new mongoose.Schema({
   ployos:{
     type: Boolean
   },
-  cardio:{
-    type: Boolean
-  }
+  cardio: Boolean
 })
 
 const User = mongoose.model('User', userSchema)
