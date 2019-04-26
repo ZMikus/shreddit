@@ -19,13 +19,13 @@ app.use(session({
 }));
 
 //controllers
-const authController = require('./controllers/authController');
-const shredditController = require('./controllers/shreddit');
-// const userController = require('./controllers/user')
 
-app.use('/login', authController);
+const authController = require('./controllers/authController');
+app.use('/auth', authController);
+const shredditController = require('./controllers/shreddit');
 app.use('/shreddit', shredditController);
-// app.use('/user', userController);
+const userController = require('./controllers/user')
+app.use('/user', userController);
 
 
 
@@ -33,6 +33,9 @@ app.use('/shreddit', shredditController);
 app.get('/', (req, res) => {
   res.render('home.ejs')
 })
+
+
+/// seed activities
 
 
 

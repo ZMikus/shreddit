@@ -21,12 +21,11 @@ const userSchema = new mongoose.Schema({
     type: Boolean
   },
   cardio: {
-  type: Boolean//,
-  // plans: [{
-  //   ref plan
-  //   'Plan'
-  // }]
-}});
+    type: Boolean
+  }
+  /// booleans for each type
+
+});
 
 const User = mongoose.model('User', userSchema)
 module.exports = User

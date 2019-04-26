@@ -4,22 +4,23 @@ const workoutSchema = new mongoose.Schema({
 
   name: {
     type: String,
-    required: true
   },
-
-  type:{
+  type: {
    	type: String,
-    required: true
   },
 
-  duration:{
+  week: {
+    type: String
+  },
+  day: {
   	type: Number
-  },
+  }
 
-  date: {
-  	type: Date, 
-  	default: Date.now
-  },
+  // activities: [{
+  //   ref.sasdfasdfasdf
+  //   'acti'
+  // }]
+
 
 
 

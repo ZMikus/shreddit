@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs');
 
 
 
-
 router.get('/test', (req, res) => {
 	console.log('==========');	
 	console.log(req.session);
@@ -17,7 +16,7 @@ router.get('/test', (req, res) => {
 	res.send('hi test')
 })
 
-router.get('/', (req, res) => {
+router.get('/login', (req, res) => {
 	res.render('login.ejs', {
 		message: req.session.message
 	})		
@@ -31,31 +30,33 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-	console.log("\n jhere is req.body in the register route:");
-	console.log(req.body);
+	
+
 	const password = req.body.password;
 	const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-	console.log('=============');
+	
 	console.log(req.session);
-	console.log('=============');
+	
 	const userDbEntry = {};
 	userDbEntry.email = req.body.email;
-	userDbEntry.password = passwordHash
+	userDbEntry.password = passwordHash;
+	userDbEntry.name = req.body.name;
+
 
 	try{
 		const createdUser = await User.create(userDbEntry);
-
+		
 		req.session.logged = true;
 		req.session.usersDbId = createdUser._id;
 
-		res.redirect('/shreddit');
-		console.log("THIS IS IT!!");
+		res.redirect('/login/select');
+		
 	} catch(err){
 		res.send(err)
 	}
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/login', async (req, res, next) => {
 	try{
 		console.log('\nreq.body in login route:');
 		const foundUser = await User.findOne({email: req.body.email});
@@ -69,9 +70,9 @@ router.post('/', async (req, res, next) => {
 				req.session.username = req.body.email;
 				req.session.logged = true;
 				req.session.userDbId = foundUser.id;
-
+				
 				console.log(req.session, 'successful login');
-				res.redirect('/shreddit');
+				res.redirect('/shreddit/select-plan');
 
 			}else{
 				req.session.message = "Incorrect Username/Password";

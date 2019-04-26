@@ -6,22 +6,20 @@ const planSchema = new mongoose.Schema({
 		type: Date, 
 	  	default: Date.now
 	},
-	activePlan: {
-  		type: Boolean,
-  		required: true
-	},
-	name: {
+	 name: {
 		type: String,
 		required: true
 	},
-	user: {//should this be user or user's focus?
+	 user: {//should this be user or user's focus?
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
-	activities: [{
+	
+	workouts: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Workout'
 	}]
+	
 });
 
 const Plan = mongoose.model('Plan', planSchema)
