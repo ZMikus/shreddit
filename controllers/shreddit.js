@@ -8,23 +8,21 @@ const Activities = require('../models/activities')
 
 router.post('/', async (req, res, next) => {
 	console.log(req.body)
+	console.log(req.session)
 	/// create the shreddit plan
 	// info you need to create plan is in req.body
 
 	// create workouts
 
+console.log(req.body)
 
-
-	res.send('you hit post, check terminal for req.body')
+	res.render('index.ejs')
 
 	
 })
 
-router.get('/shreddit', (req, res) => {
-	res.render('index.ejs')	
-})
 
-router.get('/select-plan', (req, res) => {
+ router.get('/select-plan', (req, res) => {
 	res.render('selectPlan.ejs')
 })
 
