@@ -49,7 +49,7 @@ router.post('/register', async (req, res) => {
 		req.session.logged = true;
 		req.session.usersDbId = createdUser._id;
 
-		res.redirect('/login/select');
+		res.redirect('/shreddit/select-plan');
 		
 	} catch(err){
 		res.send(err)
@@ -70,9 +70,10 @@ router.post('/login', async (req, res, next) => {
 				req.session.username = req.body.email;
 				req.session.logged = true;
 				req.session.userDbId = foundUser.id;
+				req.session.name = req.body.name;
 				
 				console.log(req.session, 'successful login');
-				res.redirect('/shreddit');
+				res.redirect('/shreddit/select-plan');
 
 			}else{
 				req.session.message = "Incorrect Username/Password";

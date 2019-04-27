@@ -7,14 +7,15 @@ const Activities = require('../models/activities')
 
 
 router.post('/', async (req, res, next) => {
-	console.log(req.body)
 	console.log(req.session)
+	//console.log(req.body)
+	// console.log(req.session)
 	/// create the shreddit plan
 	// info you need to create plan is in req.body
 
 	// create workouts
 
-console.log(req.body)
+// console.log(req.body)
 
 	res.render('index.ejs')
 
