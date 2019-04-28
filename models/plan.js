@@ -7,8 +7,8 @@ const planSchema = new mongoose.Schema({
 	  	default: Date.now
 	},
 	 name: {
-		type: String,
-		required: true
+		type: String
+	
 	},
 	 user: {//should this be user or user's focus?
 		type: mongoose.Schema.Types.ObjectId,

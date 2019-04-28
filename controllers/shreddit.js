@@ -8,19 +8,44 @@ const Activities = require('../models/activities')
 
 router.post('/', async (req, res, next) => {
 	console.log(req.session)
-	//console.log(req.body)
-	// console.log(req.session)
-	/// create the shreddit plan
-	// info you need to create plan is in req.body
+	console.log(req.body)
+	try{
+		if(req.body.weights === 'on'){
+			const createdPlan = Plan.create(req.body, (err, createdPlan)=>{
+			createdPlan.name = 'weights'
+			res.render('index.ejs', {
+				plan: createdPlan
+			})
 
-	// create workouts
-
-// console.log(req.body)
-
-	res.render('index.ejs')
-
-	
+			})
+		}
+	}catch(err){
+		next(err)
+	}
 })
+// 	try{
+//     /// create the shreddit plan
+//     // info you need to create plan is in req.body
+//     // create workouts
+//     if(req.body.weights === 'on'){
+//         const createdPlan = Plan.create(req.body, (err, createdPlan)=>{
+// 				createdPlan.name = 'weights'
+  
+//         res.render('index.ejs', {
+//             plan: createdPlan
+//         })
+//     }) catch(err){
+//         next(err)
+//     }
+//     }
+    
+// 	}
+// })
+
+
+
+
+
 
 
  router.get('/select-plan', (req, res) => {
