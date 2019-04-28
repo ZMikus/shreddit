@@ -13,7 +13,10 @@ router.post('/', async (req, res, next) => {
 		if(req.body.weights === 'on'){
 			const createdPlan = Plan.create(req.body, (err, createdPlan)=>{
 			createdPlan.name = 'weights'
-			createdPlan.startDate = Date.now()
+			// workout.week = week 1
+			// 
+
+			
 			res.render('index.ejs', {
 				plan: createdPlan
 			})

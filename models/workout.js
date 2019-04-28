@@ -2,18 +2,21 @@ const mongoose = require('mongoose');
 
 const workoutSchema = new mongoose.Schema({
 
-  name: {
-    type: String,
-  },
-  type: {
-   	type: String,
-  },
-  
+  // name: {
+  //   type: String,
+  // },
+  // type: {
+  //  	type: String,
+  // },
   week: {
     type: String
   },
   day: {
   	type: Number
+  },
+  activities: {
+    type: mongoose.Schema.Types.ObjectId,
+		ref: 'Activies'
   }
 
   // activities: [{

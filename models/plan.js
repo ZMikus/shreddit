@@ -14,7 +14,6 @@ const planSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
-	
 	workouts: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Workout'
