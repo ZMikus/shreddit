@@ -13,6 +13,7 @@ router.post('/', async (req, res, next) => {
 		if(req.body.weights === 'on'){
 			const createdPlan = Plan.create(req.body, (err, createdPlan)=>{
 			createdPlan.name = 'weights'
+			createdPlan.startDate = Date.now()
 			res.render('index.ejs', {
 				plan: createdPlan
 			})
