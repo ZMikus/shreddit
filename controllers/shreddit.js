@@ -75,29 +75,13 @@ const offDays = [
 	const prefs = ['weights', 'plyo', 'cardio']
 	
 	const howManyActivitiesYouWant = 5
+	console.log(req.body.value);
 
 	// if(dayActivities.length % 3 <= 0){ 
 	for(let i = 0; i < howManyActivitiesYouWant; i++) { // dealing with one activity type at a time
 
 		// this is the type
 		console.log(prefs[i % prefs.length])
-
-
-		// if(prefs.length % i === 0){
-		// 	for(let j = 0; j < Activities.length; j++){
-		// 		dayActivities.push(Activities[j].type)
-		// 	}
-			
-
-		// 	console.log("==============");
-		// 	console.log("this is dayActivities ----> " + dayActivities);
-		// 	console.log("==============");
-
-
-		// }
-		// if(activities[i].type === prefs[i] && dayActivities.length % 3 <= 0){
-		// 	activities[i].push(dayActivities)
-		// }
 
 		// print the tyupe of activity we should be generating
 
