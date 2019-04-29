@@ -7,7 +7,8 @@ const Activities = require('../models/activities')
 
 
 router.post('/', async (req, res, next) => {
-
+	console.log("this is the req.body ")
+	console.log(req.body.selectitem)
 	try{
 			const createdPlan = await Plan.create(req.body)
 
@@ -40,8 +41,8 @@ router.post('/', async (req, res, next) => {
 							// console.log(typeOfActivity)
 							// const dayActivity = await Activities.find({name:typeOfActivity})
 							const activitiesOfType = await Activities.find({type:typeOfActivity})
-							console.log("activities of type " + typeOfActivity)
-							console.log(activitiesOfType)
+							//console.log("activities of type " + typeOfActivity)
+							//console.log(activitiesOfType)
 							// once it correctly cycles thru -- and no sooner -- get a random activity for the type
 				
 							const randomActivityNumber = Math.floor(Math.random() * (activitiesOfType.length));
@@ -60,7 +61,8 @@ router.post('/', async (req, res, next) => {
 			console.log("\n here is the createdPlan")
 			console.log(createdPlan)
 
-
+			
+		
 
 			// create the plan		
 
@@ -81,17 +83,14 @@ router.post('/', async (req, res, next) => {
 
 			
 		
-		// const dayActivities = [];
-		
-			// save workout -- this is an asynchronous db operation
-			// console.log(newWorkout)
+	
 
 		
 
 	
 		
 
-			// create a workout (all type of activities selected)
+		
 
 			
 
