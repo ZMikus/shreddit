@@ -10,8 +10,57 @@ router.post('/', async (req, res, next) => {
 
 	try{
 			const createdPlan = await Plan.create(req.body)
-			const newWorkout = new Workout
-			console.log('this is the new workout ========= ', newWorkout)
+
+			const prefs = ['weights', 'plyo', 'cardio'] 
+			const howManyActivitiesYouWant = 5;
+			const workoutDays = []
+			const startDate = new Date('April 29, 2019');
+			const allDays = [startDate]
+			// creating an array of all days for the next 4 weeks
+			for(let i = 0; i < 27; i++){
+				// create the next date object -- 1 day after the last element in allDays
+				const newDate = new Date(allDays[i].getTime() + (24 * 60 * 60 * 1000))
+				allDays.push(newDate)
+			}
+			
+			
+
+			for(let i = 0; i < allDays.length; i++){
+					if(allDays[i].getDay() === 1 || allDays[i].getDay() === 3 || allDays[i].getDay() === 5) {
+						const newWorkout = new Workout
+						console.log('this is the new workout ========= ', newWorkout)
+						for(let i = 0; i < howManyActivitiesYouWant; i++) { 
+							// use modulo, i, and prefs.length (HINT HINT) to programmatically cycle thru prefs
+							// this is the type
+				
+							// print the type of activity we should be generating
+							const typeOfActivity = prefs[i % prefs.length]
+							// console.log(typeOfActivity)
+							// const dayActivity = await Activities.find({name:typeOfActivity})
+							const activitiesOfType = await Activities.find({type:typeOfActivity})
+							console.log("activities of type " + typeOfActivity)
+							console.log(activitiesOfType)
+							// once it correctly cycles thru -- and no sooner -- get a random activity for the type
+				
+							const randomActivityNumber = Math.floor(Math.random() * (activitiesOfType.length));
+							
+							newWorkout.activities.push(activitiesOfType[randomActivityNumber])
+							createdPlan.workouts.push(newWorkout)
+							
+				
+
+
+
+					}
+					
+				}
+			}
+
+			await createdPlan.save()
+			console.log("\n here is the createdPlan")
+			console.log(createdPlan)
+
+
 
 			// create the plan		
 
@@ -23,49 +72,23 @@ router.post('/', async (req, res, next) => {
 			// loop over array of dates. in the loop:
 
 			// convert this to array of date objects
-			const days = [
-				"Monday",
-				"Tusday",
-				"Wedensday",
-				"Thursday",
-				"Friday",
-				"Saturday",
-				"Sundary"
-			]
+		
 			// figure out all the types of workouts the user wants req.body
-			const prefs = ['weights', 'plyo', 'cardio'] 
+			
 
 			// put those types in an array
-			console.log("------------------------");
+			// console.log("------------------------");
 
 			
-		const howManyActivitiesYouWant = 5;
+		
 		// const dayActivities = [];
-		for(let i = 0; i < howManyActivitiesYouWant; i++) { 
-			// use modulo, i, and prefs.length (HINT HINT) to programmatically cycle thru prefs
-			// this is the type
-
-			// print the type of activity we should be generating
-			const typeOfActivity = prefs[i % prefs.length]
-			// console.log(typeOfActivity)
-			// const dayActivity = await Activities.find({name:typeOfActivity})
-			const activitiesOfType = await Activities.find({type:typeOfActivity})
-			console.log("activities of type " + typeOfActivity)
-			console.log(activitiesOfType)
-		// once it correctly cycles thru -- and no sooner -- get a random activity for the type
-
-			const randomActivityNumber = Math.floor(Math.random() * (activitiesOfType.length));
-			
-			newWorkout.activities.push(activitiesOfType[randomActivityNumber])
-
-			await newWorkout.save()
-
+		
 			// save workout -- this is an asynchronous db operation
-			console.log(newWorkout)
+			// console.log(newWorkout)
 
 		
 
-	}
+	
 		
 
 			// create a workout (all type of activities selected)
