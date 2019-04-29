@@ -26,9 +26,11 @@ router.post('/', async (req, res, next) => {
 			
 
 			for(let i = 0; i < allDays.length; i++){
-					if(allDays[i].getDay() === 1 || allDays[i].getDay() === 3 || allDays[i].getDay() === 5) {
+					if(allDays[i].getDay() === 1 || allDays[i].getDay() === 3 || allDays[i]
+					.getDay() === 5) {
+						// create a new blank workout
 						const newWorkout = new Workout
-						console.log('this is the new workout ========= ', newWorkout)
+						// build the workout
 						for(let i = 0; i < howManyActivitiesYouWant; i++) { 
 							// use modulo, i, and prefs.length (HINT HINT) to programmatically cycle thru prefs
 							// this is the type
@@ -45,16 +47,14 @@ router.post('/', async (req, res, next) => {
 							const randomActivityNumber = Math.floor(Math.random() * (activitiesOfType.length));
 							
 							newWorkout.activities.push(activitiesOfType[randomActivityNumber])
-							createdPlan.workouts.push(newWorkout)
-							
-				
+						
+						} // end of for loop that adds activities to workout
+						createdPlan.workouts.push(newWorkout)
+				} // end of if its MWF
+
+			} // end of looping over days
 
 
-
-					}
-					
-				}
-			}
 
 			await createdPlan.save()
 			console.log("\n here is the createdPlan")
