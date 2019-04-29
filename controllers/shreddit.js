@@ -14,7 +14,72 @@ router.post('/', async (req, res, next) => {
 			const createdPlan = Plan.create(req.body, (err, createdPlan)=>{
 			createdPlan.name = 'weights'
 			// workout.week = week 1
-			// 
+			// workout.day = day 1
+			// activities.type = 'weights'
+			// activities.duration = 'null'
+			//activities.quantities = 10
+			//activies.name = "bench-press"
+
+			// end of workout
+
+
+
+			// create the plan		
+
+				// figure out what days the workouts should be
+					/// this could be up to 20 lines of code
+
+				// store those days in an array
+
+				// figure out all the types of workouts the user wants req.body
+				// put those types in an array
+
+
+				// loop over array of dates. in the loop:
+					// create a workout (all type of activities selected)
+					// set the workout day to be this date in the array
+
+
+					// loop through array of types the user selected  --- use while loop with modulus (modulate by the number of activities they selected)
+
+						// for each type:
+
+						// if there are not yet 3 activities
+							
+							// random activity:
+
+								// get the activities of this type from the database
+								// Math.random to get one of those 
+
+
+
+
+
+
+			
+					
+				
+
+				
+				
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			//workout.
 
 			
 			res.render('index.ejs', {
