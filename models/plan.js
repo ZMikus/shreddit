@@ -4,7 +4,7 @@ const Workout = require('./workout')
 const planSchema = new mongoose.Schema({
 	startDate: {
 		type: Date, 
-	  default: Date.now
+	  	default: Date.now
 	},
 	 name: {
 		type: String
