@@ -1,10 +1,13 @@
 
 <%- include ./partials/header.ejs %>
 <div class="container">
-<h1>Check this out! This is the show page</h1>
+<h1>Welcome to Your Shreddit Plan</h1>
 
 
-<p> <%=plan.workouts%>
-
+	<% for (let i = 0; i < plan.workouts.length; i++) {%>
+		<li><%=plan.workouts[i].day%></li>
+		<li><a href="/shreddit/<%=plan.workouts[i]._id%>"><%=plan.workouts[i].activities%></a></li>
+		
+		<%}%>
 
 </div>

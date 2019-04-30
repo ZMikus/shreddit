@@ -5,14 +5,8 @@ const workoutSchema = new mongoose.Schema({
   // name: {
   //   type: String,
   // },
-  // type: {
-  //  	type: String,
-  // },
-  week: {
-    type: String
-  },
   day: {
-  	type: Number
+  	type: Date
   },
   activities: [{
     type: mongoose.Schema.Types.ObjectId,
