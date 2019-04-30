@@ -40,12 +40,12 @@ router.post('/', async (req, res, next) => {
 						// create a new blank workout
 						const newWorkout = new Workout
 						// build the workout
-						for(let i = 0; i < howManyActivitiesYouWant; i++) { 
+						for(let j = 0; j < howManyActivitiesYouWant; j++) { 
 							// use modulo, i, and prefs.length (HINT HINT) to programmatically cycle thru prefs
 							// this is the type
 				
 							// print the type of activity we should be generating
-							const typeOfActivity = prefs[i % prefs.length]
+							const typeOfActivity = prefs[j % prefs.length]
 							// console.log(typeOfActivity)
 							// const dayActivity = await Activities.find({name:typeOfActivity})
 							const activitiesOfType = await Activities.find({type:typeOfActivity})
@@ -56,8 +56,10 @@ router.post('/', async (req, res, next) => {
 							const randomActivityNumber = Math.floor(Math.random() * (activitiesOfType.length));
 							
 							newWorkout.activities.push(activitiesOfType[randomActivityNumber])
-						
+							
+
 						} // end of for loop that adds activities to workout
+						newWorkout.day = allDays[i]
 						await newWorkout.save()
 						createdPlan.workouts.push(newWorkout)
 				} // end of if its MWF
