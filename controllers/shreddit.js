@@ -50,6 +50,7 @@ router.post('/', async (req, res, next) => {
 							newWorkout.activities.push(activitiesOfType[randomActivityNumber])
 						
 						} // end of for loop that adds activities to workout
+						await newWorkout.save()
 						createdPlan.workouts.push(newWorkout)
 				} // end of if its MWF
 
@@ -87,37 +88,48 @@ router.post('/', async (req, res, next) => {
 
 		
 
-	
-		
-
-		
-
-			
-
-
-		//workout.// 	res.render('index.ejs', {
-		// 		plan: createdPlan
-		// 	})
-
-		// 	})
-		// }
-			
-		 res.send('check terminal')
+			res.redirect('/shreddit/' + createdPlan._id)
 		}catch(err){
 		next(err)
 	}
 })
-
-
-
-
 
 router.get('/select-plan', (req, res) => {
 	res.render('selectPlan.ejs')
 })
 
 
-router.get('/seed', async (req, res, next) => {
+
+router.get('/:id', async (req, res, next) => {
+	
+	console.log(req.params.id)
+
+	try {
+		const foundPlan = await Plan.findById(req.params.id).populate('workouts')
+		// query the database to find the plan with id equal to the req.params.id
+		Workout.find({})
+		.populate({
+			path: ''
+		})
+		
+		// (populate / do what you need to do)
+		// pass on the data via render 
+		console.log(foundPlan, "<------- this is the found plan")
+		res.render("show.ejs", {
+			// yourChosenName: data
+		})
+
+	} catch (err) {
+		// error handling goes here
+	}
+
+})
+
+
+
+
+
+router.get('/seed/data', async (req, res, next) => {
 	
 	const activities = [
 		//cardio

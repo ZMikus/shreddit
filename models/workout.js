@@ -19,10 +19,7 @@ const workoutSchema = new mongoose.Schema({
 		ref: 'Activities'
   }]
 
-  // activities: [{
-  //   ref.sasdfasdfasdf
-  //   'acti'
-  // }]
+
 
 
 
