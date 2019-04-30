@@ -107,45 +107,29 @@ router.get('/select-plan', (req, res) => {
 	res.render('selectPlan.ejs')
 })
 
-router.get('/:id', async (req, res, next) => {
-	
-	console.log(req.params.id)
-
-	try {
-		const foundPlan = await 
-		// query the database to find the plan with id equal to the req.params.id
-		// (populate / do what you need to do)
-		// pass on the data via render 
-
-		res.render("show.ejs", {
-			// yourChosenName: data
-		})
-
-	} catch (err) {
-		// error handling goes here
-	}
-
-})
-
-
 
 router.get('/:id', async (req, res, next) => {
 	
 	console.log(req.params.id)
 
 	try {
-		const foundPlan = await Plan.findById(req.params.id).populate('workouts')
 		// query the database to find the plan with id equal to the req.params.id
-		Workout.find({})
-		.populate({
-			path: ''
-		})
+		const foundPlan = await Plan.findById(req.params.id)
+			.populate({
+				path: 'workouts',
+				populate: {
+						path: 'activities',
+						model: 'Activity'
+				}
+			})
+	
 		
 		// (populate / do what you need to do)
 		// pass on the data via render 
 		console.log(foundPlan, "<------- this is the found plan")
 		res.render("show.ejs", {
 			// yourChosenName: data
+			plan: foundPlan
 		})
 
 	} catch (err) {
