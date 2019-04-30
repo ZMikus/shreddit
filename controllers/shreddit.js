@@ -123,7 +123,7 @@ router.get('/:id', async (req, res, next) => {
 	console.log(req.params.id)
 
 	try {
-
+		const foundPlan = await 
 		// query the database to find the plan with id equal to the req.params.id
 		// (populate / do what you need to do)
 		// pass on the data via render 
