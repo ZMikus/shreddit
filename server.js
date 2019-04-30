@@ -3,17 +3,18 @@ const app = express();
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const session = require('express-session')
+require('dotenv').config()
 
 
 require("./db/db")
 
-
+const PORT = process.env.PORT
 // middleWare
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.static('public'))
 app.use(methodOverride('_method'));
 app.use(session({
-  secret: 'asdlfkjalsdkfjalsdkjfapw983u2357028euqoih23597357qjkweh',
+  secret: process.env.SESSION_SECRET,
   saveUninitialized: false,
   resave: false
 }));
@@ -39,6 +40,6 @@ app.get('/', (req, res) => {
 
 
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log("server listening on 3000");
 })
