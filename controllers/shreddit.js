@@ -142,18 +142,16 @@ router.get('/:id', async (req, res, next) => {
 
 })
 
-router.delete('/:planId/:workoutId', (req, res, next) => {
+router.delete('/:id', (req, res, next) => {
 	
-	
-
-	Workout.deleteOne({id: req.params.workoutId}, (err, deletedWorkout) =>{
+	Workout.deleteOne({_id: req.params.workoutId}, (err, deletedWorkout) =>{
 		if(err){
 			res.send(err)
 		}else{
 
 
 
-			res.redirect('/shreddit')
+			res.redirect('/shreddit/' + req.params.id)
 		}				
 	})
 
