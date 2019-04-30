@@ -7,15 +7,23 @@ const Activities = require('../models/activities')
 
 
 router.post('/', async (req, res, next) => {
-	console.log("this is the req.body ")
-	console.log(req.body.selectitem)
 	try{
 			const createdPlan = await Plan.create(req.body)
 
-			const prefs = ['weights', 'plyo', 'cardio'] 
-			const howManyActivitiesYouWant = 5;
+			const prefs = [] 
+				if(req.body.weights === 'on'){
+					prefs.push('weights')
+				}
+				if(req.body.plyos === 'on'){
+					prefs.push('plyos')
+				}
+				if(req.body.cardio === 'on'){
+					prefs.push('cardio')
+				}
+			console.log(req.body);
+			const howManyActivitiesYouWant = req.body.selectitem;
 			const workoutDays = []
-			const startDate = new Date('April 29, 2019');
+			const startDate = new Date(req.body.startDate)
 			const allDays = [startDate]
 			// creating an array of all days for the next 4 weeks
 			for(let i = 0; i < 27; i++){
@@ -89,6 +97,7 @@ router.post('/', async (req, res, next) => {
 		
 
 			res.redirect('/shreddit/' + createdPlan._id)
+
 		}catch(err){
 		next(err)
 	}
@@ -96,6 +105,26 @@ router.post('/', async (req, res, next) => {
 
 router.get('/select-plan', (req, res) => {
 	res.render('selectPlan.ejs')
+})
+
+router.get('/:id', async (req, res, next) => {
+	
+	console.log(req.params.id)
+
+	try {
+		const foundPlan = await 
+		// query the database to find the plan with id equal to the req.params.id
+		// (populate / do what you need to do)
+		// pass on the data via render 
+
+		res.render("show.ejs", {
+			// yourChosenName: data
+		})
+
+	} catch (err) {
+		// error handling goes here
+	}
+
 })
 
 
