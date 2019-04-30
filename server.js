@@ -12,6 +12,8 @@ const PORT = process.env.PORT
 // middleWare
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.static('public'))
+
+
 app.use(methodOverride('_method'));
 app.use(session({
   secret: process.env.SESSION_SECRET,

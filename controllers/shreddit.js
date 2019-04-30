@@ -108,6 +108,7 @@ router.get('/select-plan', (req, res) => {
 })
 
 
+
 router.get('/:id', async (req, res, next) => {
 	
 	console.log(req.params.id)
@@ -134,12 +135,28 @@ router.get('/:id', async (req, res, next) => {
 
 	} catch (err) {
 		// error handling goes here
+		next(err)
 	}
 
 })
 
+router.delete('/:planId/:workoutId', (req, res, next) => {
+	
+	
+
+	Workout.deleteOne({id: req.params.workoutId}, (err, deletedWorkout) =>{
+		if(err){
+			res.send(err)
+		}else{
 
 
+
+			res.redirect('/shreddit')
+		}				
+	})
+
+})			
+		
 
 
 router.get('/seed/data', async (req, res, next) => {

@@ -4,7 +4,12 @@
 <h1>Check this out! This is the show page</h1>
 
 
-<p> <%=plan.workouts%>
+<ul>
+          <% for (let i = 0; i < plan.workouts.length; i++) {%>
+              <li><a href="/shreddit/<%=plan.workouts[i]._id%>"><%=plan.workouts[i]%></a></li>
+              <a href="/shreddit/delete">Delete</a>
+          <% } %>
+        </ul>
 
 
 </div>
