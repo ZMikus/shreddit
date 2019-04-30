@@ -110,12 +110,33 @@ router.post('/', async (req, res, next) => {
 		// 	})
 		// }
 			
-		 res.send('check terminal')
+		 // res.send('check terminal')
+		 res.redirect('/shreddit/' + createdPlan._id)
 		}catch(err){
 		next(err)
 	}
 })
 
+
+router.get('/:id', async (req, res, next) => {
+	
+	console.log(req.params.id)
+
+	try {
+
+		// query the database to find the plan with id equal to the req.params.id
+		// (populate / do what you need to do)
+		// pass on the data via render 
+
+		res.render("show.ejs", {
+			// yourChosenName: data
+		})
+
+	} catch (err) {
+		// error handling goes here
+	}
+
+})
 
 
 
