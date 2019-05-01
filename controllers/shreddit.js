@@ -164,18 +164,17 @@ router.delete('/:id', (req, res, next) => {
 	})
 	})			
 		
-router.get('/:id/edit', (req, res) =>{
-	Workout.findOne({'activities': req.params.id})
-	.populate({path: 'activities', match: {_id: req.params.id}})
-	.exec((err, foundWorkoutActivity) => {
-		console.log(foundWorkoutActivity)
-		if(err) {
-			return handleError(err);
-		} else {
+router.get('/:id/edit/', (req, res) =>{
+	Activities.findById(req.params.id, (err, foundActivity) => {
+		console.log(foundActivity)
 		res.render('edit.ejs', {
-			workout: foundWorkoutActivity.activities[0],
+			workout: foundActivity
+			
 		})
-	}
+		
+	})
+
+	
 	// Workout.findByIdAndUpdate(req.params.id, req.body, {new:true}, (err, foundWorkout)=>{
 	// 	Activities.findById()
 	// 	res.render('edit.ejs', {
@@ -184,7 +183,6 @@ router.get('/:id/edit', (req, res) =>{
 
 	// });
 	});
-})
 
 
 router.get('/seed/data', async (req, res, next) => {

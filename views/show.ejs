@@ -5,14 +5,21 @@
 
 
 
-<ul>
+        <ul>
           <% for (let i = 0; i < plan.workouts.length; i++) {%>
-              <li><%=plan.workouts[i].day%></li>
-              <li><a href="/shreddit/<%=plan.workouts[i]._id%>"><%=plan.workouts[i]%></a></li>
+              <h4><%=plan.workouts[i].day%></h4>
+                  <% for (let j = 0; j < plan.workouts[i].activities.length; j++) {%>
+                          <%if(plan.workouts[i].activities[j].duration === null){%>
+                      <li><%=plan.workouts[i].activities[j].quantity%> <%=plan.workouts[i].activities[j].name%></li>
+                  <%}if(plan.workouts[i].activities[j].quantity === null){%>
+                    <li><%=plan.workouts[i].activities[j].duration%> <%=plan.workouts[i].activities[j].name%>
+                  <%}%>
+              <%}%>
               <form action="/shreddit/<%=plan.workouts[i]._id%>?_method=DELETE" method="POST">
-          <button type="submit">Delete Workout</button>
+          <button type="submit">Completed Workout</button>
           <a href="/shreddit/<%=plan.workouts[i]._id%>/edit">Edit</a>
-				</form>		
+                </form>        
+                
           <% } %>
         </ul>
 
