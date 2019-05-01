@@ -74,31 +74,7 @@ router.post('/', async (req, res, next) => {
 
 			
 		
-
-			// create the plan		
-
-			// figure out what days the workouts should be
-			/// this could be up to 20 lines of code
-
-			// store those days in an array
-
-			// loop over array of dates. in the loop:
-
-			// convert this to array of date objects
-		
-			// figure out all the types of workouts the user wants req.body
-			
-
-			// put those types in an array
-			// console.log("------------------------");
-
-			
-		
-	
-
-		
-
-			res.redirect('/shreddit/' + createdPlan._id)
+		res.redirect('/shreddit/' + createdPlan._id)
 
 		}catch(err){
 		next(err)
@@ -230,19 +206,19 @@ router.get('/seed/data', async (req, res, next) => {
 		{
 			type: "weights",
 			duration: null,
-			quantity: 50,
+			quantity: 15,
 			name: "Bench Press"
 		},
 		{
 			type: "weights",
 			duration: null,
-			quantity: 50,
-			name: "Bicep Curls"
+			quantity: 15,
+			name: "Military Press"
 		},
 		{
 			type: "weights",
 			duration: null,
-			quantity: 50,
+			quantity: 20,
 			name: "Sqaut"
 		},
 		

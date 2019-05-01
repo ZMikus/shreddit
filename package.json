@@ -4,8 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-    
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile:sass": "node-sass sass/main.scss public/css/style.comp.css",
+    "build:css": "npm-run-all compile:sass concat:css prefix:css compress:css",
+    "scss": "node-sass --watch scss -o css"
   },
   "repository": {
     "type": "git",
@@ -27,5 +29,8 @@
     "express-session": "^1.16.1",
     "method-override": "^3.0.0",
     "mongoose": "^5.5.3"
+  },
+  "devDependencies": {
+    "node-sass": "^4.12.0"
   }
 }

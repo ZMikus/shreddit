@@ -1,0 +1,97 @@
+body{
+ 
+  color: black;
+  font-family: 'Lato', sans-serif;
+}
+.navbar{
+  background-color: black;
+  opacity: 0.8
+}
+ .nav-item{
+  color: white;
+  font-size: 25px;
+  padding: 10px;
+}
+.shreddit-logo-nav{
+  height: 35px;
+ 
+}
+#home-section{
+  background:url("/shreddit-landing.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 600px
+
+}
+#home-section h1, p{
+  color: #fff;
+}
+#home-section p{
+  font-size: 25px;
+}
+#home-section .home-inner{
+  padding-top: 150px;
+}
+#home-section .card-form{
+  opacity: 0.8;
+}
+#home-section .fas{
+  color: black ;
+  background: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+#testimonials-section{
+  background-color: rgb(245, 51, 63)
+}
+#testimonials h1{
+  text-transform: uppercase;
+  font-weight: bold;
+}
+blockquote {
+  padding: 2%;
+  font-style: italic;
+  line-height: 120%;
+  position: relative;
+  font-size: 25px;
+}
+cite {
+  font-size: 80%;
+  margin-top: 5px;
+  display: block;
+  
+}
+cite img{
+  height: 45px;
+  border-radius: 50%;
+  margin-right: 10px;
+  vertical-align: middle;
+  
+}
+blockquote:before{
+  content: "\201C";
+  font-size: 400%;
+  display: block;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+}
+.testimonial-pic{
+  height: 101%;
+  width: 101%;
+}
+
+#main-footer{
+  background-color: rgb(65, 64, 66);
+  height: 100px;
+}
+
+.workout{
+  font-size: 45px;
+  list-style: none
+}
+
+.show-card{
+box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.3);
+}

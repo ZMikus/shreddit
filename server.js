@@ -8,15 +8,16 @@ require('dotenv').config()
 
 require("./db/db")
 
-const PORT = 3000 //process.env.PORT
+const PORT = process.env.PORT
 // middleWare
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.static('public'))
 
 
+
 app.use(methodOverride('_method'));
 app.use(session({
-  secret: 'asdflkjaf;lajd;flkjadf',//process.env.SESSION_SECRET,
+  secret:process.env.SESSION_SECRET,
   saveUninitialized: false,
   resave: false
 }));
