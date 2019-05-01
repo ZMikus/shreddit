@@ -7,9 +7,11 @@
 
 <ul>
           <% for (let i = 0; i < plan.workouts.length; i++) {%>
+              <li><%=plan.workouts[i].day%></li>
               <li><a href="/shreddit/<%=plan.workouts[i]._id%>"><%=plan.workouts[i]%></a></li>
               <form action="/shreddit/<%=plan.workouts[i]._id%>?_method=DELETE" method="POST">
-					<button type="submit">Delete Car</button>
+          <button type="submit">Delete Workout</button>
+          <a href="/shreddit/<%=plan.workouts[i]._id%>/edit">Edit</a>
 				</form>		
           <% } %>
         </ul>

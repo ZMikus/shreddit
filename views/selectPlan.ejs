@@ -1,11 +1,12 @@
 <%- include ./partials/header.ejs %>
 <div class="container">
 
-<h1>SHREDDIT BRAH!!!</h1>
+
 <h1> Please select your workout preference</h1>
 <div class="form-group">
 <div class="checkbox-group">
 <form action="/shreddit" method="POST">
+<div class="form-check">
  <input type="checkbox" name="weights" class="form-check-input" id=weights>
     <label class="form-check-label" >Weights</label>
   </div>
@@ -17,7 +18,7 @@
     <input type="checkbox" name="cardio" class="form-check-input" id="cardio">
     <label class="form-check-label" >Cardiovascular</label>
   </div>
-  <h3>Number of Activities per Workout</h3>
+  <h3 class="mt-3 mb-4">Number of Activities per Workout</h3>
   <select name="selectitem" id="numOfActivities">
     <option  value="1">1</option>
     <option  value="2">2</option>
@@ -25,8 +26,9 @@
     <option  value="4">4</option>
     <option  value="5">5</option>
     <option  value="6">6</option>
-  </select>
-  <label for="start">Start date:</label>
+  </select><br/>
+
+  <label class="mt-3" for="start">Start date:</label>
 
     <input type="date" id="start" name="startDate"
        value="<%=Date.now()%>"

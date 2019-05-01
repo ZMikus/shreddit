@@ -142,21 +142,49 @@ router.get('/:id', async (req, res, next) => {
 
 })
 
+
+
 router.delete('/:id', (req, res, next) => {
-	
-	Workout.deleteOne({_id: req.params.workoutId}, (err, deletedWorkout) =>{
-		if(err){
-			res.send(err)
-		}else{
-
-
-
-			res.redirect('/shreddit/' + req.params.id)
-		}				
-	})
-
-})			
+	console.log('WHO THIS IS THE DELETE ROUTE')
+	Plan.findOne({workouts: req.params.id}, (err, foundPlan) => {
+		console.log(foundPlan);
+		Workout.findById({_id: req.params.id}, (err, foundWorkout) =>{
+			
+			Workout.deleteOne({_id: req.params.id}, (err, deletedWorkout) => {
+				console.log(req.params.id)
+				if(err){
+					next(err)
+				}else{
+					console.log(deletedWorkout)
+				res.redirect('/shreddit/' + foundPlan._id)
+				}				
+			})
 		
+		})
+	})
+	})			
+		
+router.get('/:id/edit', (req, res) =>{
+	Workout.findOne({'activities': req.params.id})
+	.populate({path: 'activities', match: {_id: req.params.id}})
+	.exec((err, foundWorkoutActivity) => {
+		console.log(foundWorkoutActivity)
+		if(err) {
+			return handleError(err);
+		} else {
+		res.render('edit.ejs', {
+			workout: foundWorkoutActivity.activities[0],
+		})
+	}
+	// Workout.findByIdAndUpdate(req.params.id, req.body, {new:true}, (err, foundWorkout)=>{
+	// 	Activities.findById()
+	// 	res.render('edit.ejs', {
+	// 		workout: foundWorkout
+	// 	});
+
+	// });
+	});
+})
 
 
 router.get('/seed/data', async (req, res, next) => {
