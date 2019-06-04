@@ -105,7 +105,13 @@ router.get('/:id', async (req, res, next) => {
 		
 		// (populate / do what you need to do)
 		// pass on the data via render 
-		console.log(foundPlan, "<------- this is the found plan")
+		console.log("Here is the found plan: ")
+		console.log(foundPlan)
+
+		for (let i = 0; i < foundPlan.workouts.length; i++) {
+			console.log(foundPlan.workouts[i])
+		}
+
 		res.render("show.ejs", {
 			// yourChosenName: data
 			plan: foundPlan
@@ -121,7 +127,7 @@ router.get('/:id', async (req, res, next) => {
 
 
 router.delete('/:id', (req, res, next) => {
-	console.log('WHO THIS IS THE DELETE ROUTE')
+	console.log('HIT THE DELETE ROUTE')
 	Plan.findOne({workouts: req.params.id}, (err, foundPlan) => {
 		console.log(foundPlan);
 		Workout.findById({_id: req.params.id}, (err, foundWorkout) =>{
@@ -185,19 +191,19 @@ router.get('/seed/data', async (req, res, next) => {
 		},
 		//plyo
 		{
-			type: "plyo",
+			type: "plyos",
 			duration: null,
 			quantity: 50,
 			name: "Burpies"
 		},
 		{
-			type: "plyo",
+			type: "plyos",
 			duration: null,
 			quantity: 50,
 			name: "Jumping Jacks"
 		},
 		{
-			type: "plyo",
+			type: "plyos",
 			duration: null,
 			quantity: 50,
 			name: "Super Mans"

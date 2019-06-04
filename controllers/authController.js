@@ -50,6 +50,8 @@ router.post('/register', async (req, res) => {
 		req.session.usersDbId = createdUser._id;
 
 		res.redirect('/shreddit/select-plan');
+
+		console.log(createdUser);
 		
 	} catch(err){
 		res.send(err)
@@ -97,13 +99,15 @@ router.post('/login', async (req, res, next) => {
 	}
 });
 
-router.get('/shreddit/logout', (req, res) => {
+router.get('/logout', (req, res) => {
 	req.session.destroy((err) => {
 		if(err){
 			res.send(err);
+			console.log('logout failed');
 
 		}else {
 			res.redirect('/')
+			console.log('user logged out');
 		}
 	})		
 })

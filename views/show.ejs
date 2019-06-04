@@ -9,8 +9,8 @@
           <% for (let i = 0; i < plan.workouts.length; i++) {%>
               <h4 class="mb-3 mt-3"><%=plan.workouts[i].day%></h4>
                   <% for (let j = 0; j < plan.workouts[i].activities.length; j++) {%>
-                          <%if(plan.workouts[i].activities[j].duration === null){%>
-                      <li class="workout mb-3"><%=plan.workouts[i].activities[j].quantity%> <%=plan.workouts[i].activities[j].name%></li>
+                    <%if(plan.workouts[i].activities[j].duration === null){%>
+                      <li class="workout mb-3"><%=plan.workouts[i].activities[j].quantity%> <%=plan.workouts[i].activities[j].name%>
                   <%}if(plan.workouts[i].activities[j].quantity === null){%>
                     <li class="workout mb-3"><%=plan.workouts[i].activities[j].duration%> <%=plan.workouts[i].activities[j].name%>
                   <%}%>
@@ -27,3 +27,57 @@
 <div>
 
 </div>
+
+
+<!-- { workouts:
+   [ { activities: [Array],
+       _id: 5cf5a2383b7d67172eb6f77d,
+       day: 2019-06-13T00:00:00.000Z,
+       __v: 0 },
+     { activities: [Array],
+       _id: 5cf5a2383b7d67172eb6f77f,
+       day: 2019-06-15T00:00:00.000Z,
+       __v: 0 },
+     { activities: [Array],
+       _id: 5cf5a2383b7d67172eb6f781,
+       day: 2019-06-18T00:00:00.000Z,
+       __v: 0 },
+     { activities: [Array],
+       _id: 5cf5a2383b7d67172eb6f783,
+       day: 2019-06-20T00:00:00.000Z,
+       __v: 0 },
+     { activities: [Array],
+       _id: 5cf5a2383b7d67172eb6f785,
+       day: 2019-06-22T00:00:00.000Z,
+       __v: 0 },
+     { activities: [Array],
+       _id: 5cf5a2383b7d67172eb6f787,
+       day: 2019-06-25T00:00:00.000Z,
+       __v: 0 },
+     { activities: [Array],
+       _id: 5cf5a2383b7d67172eb6f789,
+       day: 2019-06-27T00:00:00.000Z,
+       __v: 0 },
+     { activities: [Array],
+       _id: 5cf5a2383b7d67172eb6f78b,
+       day: 2019-06-29T00:00:00.000Z,
+       __v: 0 },
+     { activities: [Array],
+       _id: 5cf5a2383b7d67172eb6f78d,
+       day: 2019-07-02T00:00:00.000Z,
+       __v: 0 },
+     { activities: [Array],
+       _id: 5cf5a2383b7d67172eb6f78f,
+       day: 2019-07-04T00:00:00.000Z,
+       __v: 0 },
+     { activities: [Array],
+       _id: 5cf5a2383b7d67172eb6f791,
+       day: 2019-07-06T00:00:00.000Z,
+       __v: 0 },
+     { activities: [Array],
+       _id: 5cf5a2383b7d67172eb6f793,
+       day: 2019-07-09T00:00:00.000Z,
+       __v: 0 } ],
+  _id: 5cf5a2383b7d67172eb6f77c,
+  startDate: 2019-06-12T00:00:00.000Z,
+  __v: 1 } -->

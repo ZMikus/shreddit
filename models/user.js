@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema({
   cardio: {
     type: Boolean
   }
-  /// booleans for each type
 
 });
 

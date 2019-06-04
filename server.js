@@ -44,5 +44,5 @@ app.get('/', (req, res) => {
 
 
 app.listen(PORT, () => {
-  console.log("server listening on 3000");
+  console.log("server listening on " + process.env.PORT);
 })
