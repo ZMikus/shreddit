@@ -30,7 +30,6 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-	
 
 	const password = req.body.password;
 	const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
@@ -44,16 +43,23 @@ router.post('/register', async (req, res) => {
 
 
 	try{
-		const createdUser = await User.create(userDbEntry);
-		
-		req.session.logged = true;
-		req.session.usersDbId = createdUser._id;
 
-		console.log(createdUser);
+		const existingUser = await User.findOne({'email': req.body.email});
 
-		res.redirect('/shreddit/select-plan');
+		if(existingUser === null){
+			const createdUser = await User.create(userDbEntry);
+			
+			req.session.logged = true;
+			req.session.usersDbId = createdUser._id;
 
-		
+			console.log(createdUser);
+
+			res.redirect('/shreddit/select-plan');
+
+		}else{
+			req.session.message = "Account with that e-mail is already registered. Please log-in";
+			res.redirect('/auth/login');
+		}
 	} catch(err){
 		res.send(err)
 	}
