@@ -49,9 +49,10 @@ router.post('/register', async (req, res) => {
 		req.session.logged = true;
 		req.session.usersDbId = createdUser._id;
 
+		console.log(createdUser);
+
 		res.redirect('/shreddit/select-plan');
 
-		console.log(createdUser);
 		
 	} catch(err){
 		res.send(err)

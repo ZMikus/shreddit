@@ -14,15 +14,19 @@ const userSchema = new mongoose.Schema({
     type: String
     // required: true
   },
-  weights:{
-    type: Boolean
-  },
-  ployos:{
-    type: Boolean
-  },
-  cardio: {
-    type: Boolean
+  plan: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Plan'
   }
+  // weights:{
+  //   type: Boolean
+  // },
+  // ployos:{
+  //   type: Boolean
+  // },
+  // cardio: {
+  //   type: Boolean
+  // }
 
 });
 
