@@ -5,7 +5,7 @@ const Plan = require('../models/plan');
 const Workout = require('../models/workout');
 const Activities = require('../models/activities')
 
-
+//POST : Create/Select Plan
 router.post('/', async (req, res, next) => {
 	try{
 			const createdPlan = await Plan.create(req.body)
@@ -20,7 +20,7 @@ router.post('/', async (req, res, next) => {
 				if(req.body.cardio === 'on'){
 					prefs.push('cardio')
 				}
-			console.log(req.body);
+			//console.log(req.body);
 			const howManyActivitiesYouWant = req.body.selectitem;
 			const workoutDays = []
 			const startDate = new Date(req.body.startDate)
@@ -68,13 +68,27 @@ router.post('/', async (req, res, next) => {
 
 
 
-			await createdPlan.save()
+			await createdPlan.save();
+
+			// find the current user (should be possible using session)
+			const currentUser = await User.findById(req.session.userDbId)
+			// put the createdPlan onto the current user in correct place
+			currentUser.plans.push(createdPlan)
+
+			console.log("*_*_*_*_*_*");
+			console.log("current user plans");
+			console.log(currentUser.plans);
+			console.log("*_*_*_*_*_*");
+			// save current user 
+			await currentUser.save();
+			
+
 			console.log("\n here is the createdPlan")
 			console.log(createdPlan)
 
 			
 		
-		res.redirect('/shreddit/' + createdPlan._id)
+			res.redirect('/shreddit/' + createdPlan._id)
 
 		}catch(err){
 		next(err)
@@ -84,7 +98,6 @@ router.post('/', async (req, res, next) => {
 router.get('/select-plan', (req, res) => {
 	res.render('selectPlan.ejs')
 })
-
 
 
 router.get('/:id', async (req, res, next) => {
@@ -144,7 +157,7 @@ router.delete('/:id', (req, res, next) => {
 		
 		})
 	})
-	})			
+});			
 		
 router.get('/:id/edit/', (req, res) =>{
 	Activities.findById(req.params.id, (err, foundActivity) => {
@@ -155,8 +168,6 @@ router.get('/:id/edit/', (req, res) =>{
 		})
 		
 	})
-
-	
 	// Workout.findByIdAndUpdate(req.params.id, req.body, {new:true}, (err, foundWorkout)=>{
 	// 	Activities.findById()
 	// 	res.render('edit.ejs', {
@@ -164,7 +175,7 @@ router.get('/:id/edit/', (req, res) =>{
 	// 	});
 
 	// });
-	});
+});
 
 
 router.get('/seed/data', async (req, res, next) => {

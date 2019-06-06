@@ -3,25 +3,14 @@ const router = express.Router();
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 
-
-
-
-router.get('/test', (req, res) => {
-	console.log('==========');	
-	console.log(req.session);
-	console.log('==========');
-	req.session.myOwnPropertyIMadeUP = 'Cheese';
-	console.log('req.session')
-	console.log('===========');	
-	res.send('hi test')
-})
-
+//GET : Login Form
 router.get('/login', (req, res) => {
 	res.render('login.ejs', {
 		message: req.session.message
 	})		
 });
 
+//GET : Registration Form
 router.get('/register', (req, res) => {
 	
 	res.render('register.ejs', {
@@ -29,17 +18,19 @@ router.get('/register', (req, res) => {
 	})		
 });
 
+//POST : Registration Form
 router.post('/register', async (req, res) => {
 
 	const password = req.body.password;
 	const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-	
+	console.log('this is req.session');
 	console.log(req.session);
 	
 	const userDbEntry = {};
 	userDbEntry.email = req.body.email;
 	userDbEntry.password = passwordHash;
 	userDbEntry.name = req.body.name;
+	
 
 
 	try{
@@ -65,11 +56,14 @@ router.post('/register', async (req, res) => {
 	}
 });
 
+
+//POST : Login Form
 router.post('/login', async (req, res, next) => {
+
 	try{
 		console.log('\nreq.body in login route:');
-		const foundUser = await User.findOne({email: req.body.email});
-		
+		const foundUser = await User.findOne({email: req.body.email}).populate('plan');
+
 		console.log("\n here's the foundUser, should not be null");
 		console.log(foundUser);
 
@@ -80,9 +74,10 @@ router.post('/login', async (req, res, next) => {
 				req.session.logged = true;
 				req.session.userDbId = foundUser.id;
 				req.session.name = req.body.name;
+				//req.session.plan = []
 				
 				console.log(req.session, 'successful login');
-				res.redirect('/shreddit/select-plan');
+				res.redirect('/shreddit/select-plan ');
 
 			}else{
 				req.session.message = "Incorrect Username/Password";
@@ -91,10 +86,6 @@ router.post('/login', async (req, res, next) => {
 			}
 		}else{
 			req.session.message = "Incorrect Username/Password";
-			console.log();
-				// console.log('login failed req.session.username', req.session.username);
-				// console.log('login failed foundUser.password', foundUser.password);
-				// console.log('login failed req.session.userDbId', req.session.userDbId)
 
 			res.redirect('/');
 			console.log('login failed');
@@ -106,6 +97,7 @@ router.post('/login', async (req, res, next) => {
 	}
 });
 
+//GET : Logout 
 router.get('/logout', (req, res) => {
 	req.session.destroy((err) => {
 		if(err){
@@ -119,5 +111,4 @@ router.get('/logout', (req, res) => {
 	})		
 })
 module.exports = router;
-
 

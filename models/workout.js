@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Activity = require('./activities')
 
 const workoutSchema = new mongoose.Schema({
 

@@ -3,30 +3,23 @@ const Plan = require('./plan')
 
 const userSchema = new mongoose.Schema({
   name:{
-      type: String
-      // required: true
+      type: String,
+      required: true
   },
   email:{
-    type: String
-    // required: true
+    type: String,
+    required: true
   },
   password:{
-    type: String
-    // required: true
+    type: String,
+    required: true
   },
-  plan: {
+  plans: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Plan'
-  }
-  // weights:{
-  //   type: Boolean
-  // },
-  // ployos:{
-  //   type: Boolean
-  // },
-  // cardio: {
-  //   type: Boolean
-  // }
+  }],
+
+  completedWorkouts: []
 
 });
 

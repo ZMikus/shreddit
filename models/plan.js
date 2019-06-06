@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const Workout = require('./workout')
 
 const planSchema = new mongoose.Schema({
+	createdDate: {
+		type: Date,
+		default: Date.now
+	},
+
 	startDate: {
 		type: Date, 
 	  	default: Date.now
@@ -10,7 +15,7 @@ const planSchema = new mongoose.Schema({
 		type: String
 	
 	},
-	 user: {//should this be user or user's focus?
+	 user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
