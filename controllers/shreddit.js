@@ -137,6 +137,23 @@ router.get('/:id', async (req, res, next) => {
 
 })
 
+router.get('/:id/edit/', (req, res) => {
+	Workout.findById(req.params.id, (err, foundActivities) => {
+		console.log(foundActivities)
+		res.render('edit.ejs', {
+			workout: foundActivities
+			
+		})
+		
+	})
+	Workout.findByIdAndUpdate(req.params.id, req.body, {new:true}, (err, foundWorkout)=>{
+		Activities.findById()
+		res.render('edit.ejs', {
+			workout: foundWorkout
+		});
+
+	});
+});
 
 
 router.delete('/:id', (req, res, next) => {
@@ -159,23 +176,6 @@ router.delete('/:id', (req, res, next) => {
 	})
 });			
 		
-router.get('/:id/edit/', (req, res) =>{
-	Activities.findById(req.params.id, (err, foundActivity) => {
-		console.log(foundActivity)
-		res.render('edit.ejs', {
-			workout: foundActivity
-			
-		})
-		
-	})
-	// Workout.findByIdAndUpdate(req.params.id, req.body, {new:true}, (err, foundWorkout)=>{
-	// 	Activities.findById()
-	// 	res.render('edit.ejs', {
-	// 		workout: foundWorkout
-	// 	});
-
-	// });
-});
 
 
 router.get('/seed/data', async (req, res, next) => {

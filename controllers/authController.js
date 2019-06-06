@@ -74,10 +74,9 @@ router.post('/login', async (req, res, next) => {
 				req.session.logged = true;
 				req.session.userDbId = foundUser.id;
 				req.session.name = req.body.name;
-				//req.session.plan = []
 				
 				console.log(req.session, 'successful login');
-				res.redirect('/shreddit/select-plan ');
+				res.redirect('/shreddit/select-plan');
 
 			}else{
 				req.session.message = "Incorrect Username/Password";
