@@ -9,18 +9,6 @@ let userDbId = ''
 router.get('/summary', async (req, res) => {
 	try {
 		const userDbId = req.session.userDbId
-
-		// console.log("\n here is sessions");
-		// console.log(req.session);
-		// const foundPlans = await Plan.find({
-		// 	user: userDbId
-		// });
-		// console.log("\n here are the plans we found");
-		// console.log(foundPlans);
-		// res.render('summary.ejs', {
-		// 	plans: foundPlans
-		// })
-
 		const u = await User.findById(userDbId).populate('plans')
 		console.log(u);
 		res.render('summary.ejs', {
@@ -37,15 +25,15 @@ router.post('/', async (req, res, next) => {
 			const createdPlan = await Plan.create(req.body)
 
 			const prefs = [] 
-				if(req.body.weights === 'on'){
-					prefs.push('weights')
-				}
-				if(req.body.plyos === 'on'){
-					prefs.push('plyos')
-				}
-				if(req.body.cardio === 'on'){
-					prefs.push('cardio')
-				}
+			if(req.body.weights === 'on'){
+				prefs.push('weights')
+			}
+			if(req.body.plyos === 'on'){
+				prefs.push('plyos')
+			}
+			if(req.body.cardio === 'on'){
+				prefs.push('cardio')
+			}
 			//console.log(req.body);
 			const howManyActivitiesYouWant = req.body.selectitem;
 			const workoutDays = []
@@ -95,10 +83,12 @@ router.post('/', async (req, res, next) => {
 							
 							if(a.quantity === null){
 								activity.duration = 30
+								activity.quantity = null
 							}
 
 							if(a.duration === null){
 								activity.quantity = 30
+								activity.duration = null
 							}
 
 							newWorkout.activities.push(activity)
@@ -112,22 +102,12 @@ router.post('/', async (req, res, next) => {
 			}; // end of looping over days
 
 
-
-
 			// find the current user (should be possible using session)
 			console.log("\nwe are trying to find the user based on session");
 			console.log("here is session:");
 			console.log(req.session);
 			const currentUser = await User.findById(req.session.userDbId)
 			
-			// console.log("\nhere's what (who?) we found: ");
-			// console.log(currentUser);
-			
-			// createdPlan.user = currentUser
-
-			// console.log("\nwe just set user property on this plan we're about to save:");
-			// console.log(createdPlan);
-
 			await createdPlan.save();
 
 			console.log("\nwe just saved plan, here it is post save");
@@ -139,12 +119,6 @@ router.post('/', async (req, res, next) => {
 			console.log("\nwe just pushed plan into user, here is user, which we are about to save");
 			console.log(currentUser);
 
-
-			// console.log("\n*_*_*_*_*_*");
-			// console.log("current user plans");
-			// console.log(currentUser.plans);
-			// console.log("*_*_*_*_*_*");
-			// save current user 
 			await currentUser.save();
 
 			console.log("\nhere is currentUser after saving, if it worked, we can redirect now");
@@ -157,9 +131,9 @@ router.post('/', async (req, res, next) => {
 		
 			res.redirect('/shreddit/' + createdPlan._id)
 
-		}catch(err){
-		next(err)
-	}
+		} catch(err) {
+			next(err)
+		}
 });
 
 router.get('/select-plan', (req, res) => {
@@ -175,23 +149,19 @@ router.get('/:id', async (req, res, next) => {
 	try {
 		// query the database to find the plan with id equal to the req.params.id
 		const foundPlan = await Plan.findById(req.params.id)
-			// .populate({ // shouldn't need this since we switched to subdocs for this
-			// 	path: 'workouts',
-			// 	populate: {
-			// 			path: 'activities',
-			// 			model: 'Activity'
-			// 	}
-			// });
-	
-		
-		// (populate / do what you need to do)
-		// pass on the data via render 
-		console.log("Here is the found plan: ")
+
+		console.log("\nHere is the found plan: ")
 		console.log(foundPlan)
 
-		// for (let i = 0; i < foundPlan.workouts.length; i++) {
-		// 	console.log(foundPlan.workouts[i])
-		// }
+
+			foundPlan.workouts.forEach((w, j) => {
+				console.log("\nplan " + j + ": ");
+				w.activities.forEach((a, k) => {
+					console.log("activity " + k + ": ");
+					console.log(a);
+				})
+			})
+		
 
 		res.render("show.ejs", {
 			// yourChosenName: data
@@ -206,7 +176,11 @@ router.get('/:id', async (req, res, next) => {
 });
 
 //EDIT ACTIVITY
+// /:plan_id/:workout_id/:plan_id/edit -- will need new url's and approach to this
+
 router.get('/:id/edit/', async (req, res) => {
+	// getting this user's plan, taking 
+	// 
 	try {
 		foundWorkout = await Workout.findById(req.params.id)
 		foundActivity = await Activities.findById(foundWorkout.activities)
