@@ -5,20 +5,24 @@
 
 <div class="card text-center show-card">
 
+<h2><%=plan.name%></h2>
+
         <ul>
           <% for (let i = 0; i < plan.workouts.length; i++) {%>
               <h4 class="mb-3 mt-3"><%=plan.workouts[i].day%></h4>
                   <% for (let j = 0; j < plan.workouts[i].activities.length; j++) {%>
-                    <%if(plan.workouts[i].activities[j].duration === null){%>
-                      <li class="workout mb-3"><%=plan.workouts[i].activities[j].quantity%> <%=plan.workouts[i].activities[j].name%>
-                  <%}if(plan.workouts[i].activities[j].quantity === null){%>
-                    <li class="workout mb-3"><%=plan.workouts[i].activities[j].duration%> <%=plan.workouts[i].activities[j].name%>
-                  <%}%>
-              <%}%>
-              <form action="/shreddit/<%=plan.workouts[i]._id%>?_method=DELETE" method="POST">
-          <button class="btn btn-danger" type="submit">Completed Workout</button>
-          <a class="btn btn-primary" href="/shreddit/<%=plan.workouts[i]._id%>/edit">Edit</a>
-          <a class="btn btn-success" href="/shreddit/new">Create a new Workout</a>
+                    <% if(plan.workouts[i].activities[j].duration === null){%>
+                      <li class="workout mb-3"><%=plan.workouts[i].activities[j].quantity%> <%=plan.workouts[i].activities[j].name%><br/>
+                        <a class="btn btn-primary" href="/shreddit/<%=plan.workouts[i].activities[j]._id%>/edit">Edit/Remove Activity</a>
+                    <% } %>
+                    <% if(plan.workouts[i].activities[j].quantity === null) { %>
+                    <li class="workout mb-3"><%=plan.workouts[i].activities[j].duration%> <%=plan.workouts[i].activities[j].name%><br/>
+                      <a class="btn btn-primary" href="/shreddit/<%=plan.workouts[i].activities[j]._id%>/edit">Edit/Remove Activity</a>
+                    <% } %>
+                  <% } %>
+                  <form action="/shreddit/<%=plan.workouts[i]._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger" type="submit">Completed Workout</button>
+                    <a class="btn btn-success" href="/shreddit/new">Add an Activity</a>
                 </form>     
                    
                 

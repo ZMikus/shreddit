@@ -1,0 +1,6 @@
+<% for (let i = 0; i < plan.workouts.activities.length; i++) {%>
+	<%if(plan.workouts.activities[i].duration === null){%>
+		<li class="workout mb-3"><%=plan.workouts.activities[i].quantity%> <%=plan.workouts.activities[i].name%>
+	<%}if(plan.workouts.activities[i].quantity === null){%>
+		<li class="workout mb-3"><%=plan.workouts.activities[i].duration%> <%=plan.workouts.activities[i].name%>
+<%}%>

@@ -1,4 +1,3 @@
-
 <%- include ./partials/header2.ejs %>
 <div class="container">
 <h1 class="text-center mt-5 mb-5">Welcome to Your Shreddit Plan</h1>
@@ -6,19 +5,11 @@
 <div class="card text-center show-card">
 
         <ul>
-          <% for (let i = 0; i < currentUser.plans.length; i++) {%>
-              <h4 class="mb-3 mt-3"><%=currentUser.plan[i].name%></h4>
-
-                  <%}%>
-              <%}%>
-              <form action="/shreddit/<%=plan.workouts[i]._id%>?_method=DELETE" method="POST">
-          <button class="btn btn-danger" type="submit">Completed Workout</button>
-          <a class="btn btn-primary" href="/shreddit/<%=plan.workouts[i]._id%>/edit">Edit</a>
-          <a class="btn btn-success" href="/shreddit/new">Create a new Workout</a>
-                </form>     
-                   
+          <% for (let i = 0; i < plans.length; i++) {%>
+              <h4 class="mb-3 mt-3"><a href="<%=plans[i]._id%>"><%=plans[i].name%></a></h4>
+          <%}%>
+          <a class="btn btn-success" href="/shreddit/select-plan">Create New Plan</a>
                 
-          <% } %>
         </ul>
 <div>
 

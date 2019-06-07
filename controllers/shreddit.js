@@ -4,6 +4,32 @@ const User = require('../models/user');
 const Plan = require('../models/plan');
 const Workout = require('../models/workout');
 const Activities = require('../models/activities')
+let userDbId = ''
+//
+router.get('/summary', async (req, res) => {
+	try {
+		const userDbId = req.session.userDbId
+
+		// console.log("\n here is sessions");
+		// console.log(req.session);
+		// const foundPlans = await Plan.find({
+		// 	user: userDbId
+		// });
+		// console.log("\n here are the plans we found");
+		// console.log(foundPlans);
+		// res.render('summary.ejs', {
+		// 	plans: foundPlans
+		// })
+
+		const u = await User.findById(userDbId).populate('plans')
+		console.log(u);
+		res.render('summary.ejs', {
+			plans: u.plans
+		})
+	} catch(err) {
+		console.log(err);
+	}
+});
 
 //POST : Create/Select Plan
 router.post('/', async (req, res, next) => {
@@ -30,7 +56,7 @@ router.post('/', async (req, res, next) => {
 				// create the next date object -- 1 day after the last element in allDays
 				const newDate = new Date(allDays[i].getTime() + (24 * 60 * 60 * 1000))
 				allDays.push(newDate)
-			}
+			};
 			
 			
 
@@ -48,13 +74,15 @@ router.post('/', async (req, res, next) => {
 							const typeOfActivity = prefs[j % prefs.length]
 							// console.log(typeOfActivity)
 							// const dayActivity = await Activities.find({name:typeOfActivity})
-							const activitiesOfType = await Activities.find({type:typeOfActivity})
+							const activitiesOfType = await Activities.find({type: typeOfActivity})
 							//console.log("activities of type " + typeOfActivity)
 							//console.log(activitiesOfType)
 							// once it correctly cycles thru -- and no sooner -- get a random activity for the type
 				
 							const randomActivityNumber = Math.floor(Math.random() * (activitiesOfType.length));
 							
+
+
 							newWorkout.activities.push(activitiesOfType[randomActivityNumber])
 							
 
@@ -64,16 +92,23 @@ router.post('/', async (req, res, next) => {
 						createdPlan.workouts.push(newWorkout)
 				} // end of if its MWF
 
-			} // end of looping over days
+			}; // end of looping over days
 
 
 
-			await createdPlan.save();
 
 			// find the current user (should be possible using session)
 			const currentUser = await User.findById(req.session.userDbId)
+			console.log(currentUser);
+			
+
+			createdPlan.user = currentUser
+			await createdPlan.save();
+
 			// put the createdPlan onto the current user in correct place
 			currentUser.plans.push(createdPlan)
+
+
 
 			console.log("*_*_*_*_*_*");
 			console.log("current user plans");
@@ -93,13 +128,14 @@ router.post('/', async (req, res, next) => {
 		}catch(err){
 		next(err)
 	}
-})
+});
 
 router.get('/select-plan', (req, res) => {
 	res.render('selectPlan.ejs')
-})
+});
 
 
+//PLAN SHOW
 router.get('/:id', async (req, res, next) => {
 	
 	console.log(req.params.id)
@@ -113,7 +149,7 @@ router.get('/:id', async (req, res, next) => {
 						path: 'activities',
 						model: 'Activity'
 				}
-			})
+			});
 	
 		
 		// (populate / do what you need to do)
@@ -135,27 +171,79 @@ router.get('/:id', async (req, res, next) => {
 		next(err)
 	}
 
-})
-
-router.get('/:id/edit/', (req, res) => {
-	Workout.findById(req.params.id, (err, foundActivities) => {
-		console.log(foundActivities)
-		res.render('edit.ejs', {
-			workout: foundActivities
-			
-		})
-		
-	})
-	Workout.findByIdAndUpdate(req.params.id, req.body, {new:true}, (err, foundWorkout)=>{
-		Activities.findById()
-		res.render('edit.ejs', {
-			workout: foundWorkout
-		});
-
-	});
 });
 
+//EDIT ACTIVITY
+router.get('/:id/edit/', async (req, res) => {
+	try {
+		foundWorkout = await Workout.findById(req.params.id)
+		foundActivity = await Activities.findById(foundWorkout.activities)
+		res.render('edit.ejs', {
+			activity: foundActivity,
+			workout: foundWorkout
+		})
+	} catch(err) {
+		console.log(err);
+	}
+})
 
+//UPDATE
+router.put('/:id', async (req, res) => {
+	try {
+		updatedActivity = {
+			_id: req.body.id,
+			type: req.body.type,
+			duration: req.body.duration,
+			quantity: req.body.quantity,
+			name: req.body.name
+		}
+		console.log('===============');
+		console.log(updatedActivity);
+		console.log('===============');
+		const plan = await Plan.findOne({workouts: req.params.id})
+		const foundWorkout = await Workout.findOne({activities: req.body.id})
+		const planActivityToUpdate = await Activities.findByIdAndUpdate(req.body.id, updatedActivity, {new: true})
+		plan.workouts.push(planActivityToUpdate)
+		console.log('===============');
+		console.log(planActivityToUpdate);
+		console.log('===============');
+
+		await planActivityToUpdate.save()
+		plan.workouts.splice(plan.workouts.findIndex((workouts) => {
+			return workouts.id === plan.workouts.id;
+		}),1,planActivityToUpdate);
+		await plan.save()
+		res.redirect('/shreddit/' + plan.id);
+	} catch(err) {
+		console.log(err);
+	}
+
+	// Plan.findOne({workouts: req.params.id}, (err, foundPlan) => {
+	// 	console.log('=====================');
+	// 	console.log(foundPlan.activities);
+	// 	console.log('=====================');
+	// 	Workout.findById({_id: req.params.id}, (err, foundWorkout) => {
+	// 		Activity.findOneAndUpdate(req.params.id, req.body, {new: true}, (err, updatedActivity)=>{
+	// 			res.redirect('/shreddit');
+	// 		})
+	// 	})
+	// });
+});
+
+//CREATE new activity
+router.post('/new', (req, res) => {
+	Activity.create(req.body, (err, createdActivity) => {
+		if(err){
+			res.send(err);
+		}else{
+			res.redirect('/shreddit');
+		}
+	})
+})
+
+
+
+//DESTROY Workout
 router.delete('/:id', (req, res, next) => {
 	console.log('HIT THE DELETE ROUTE')
 	Plan.findOne({workouts: req.params.id}, (err, foundPlan) => {
@@ -192,13 +280,13 @@ router.get('/seed/data', async (req, res, next) => {
 			type: "cardio",
 			duration: "1 hr 30 minute",
 			quantity: null, 
-			name: "Bikeride"
+			name: "Bike ride"
 		},
 		{
 			type: "cardio",
 			duration: "1 hr 30 minute",
 			quantity: null, 
-			name: "Elipitcal"
+			name: "Ellipitcal"
 		},
 		//plyo
 		{
@@ -236,14 +324,14 @@ router.get('/seed/data', async (req, res, next) => {
 			type: "weights",
 			duration: null,
 			quantity: 20,
-			name: "Sqaut"
+			name: "Squat"
 		},
 		
 	]
 		
 
 	await Activities.create(activities)
-  res.send('now there\'s some data')
+  	res.send('now there\'s some data')
 })
 
 

@@ -12,10 +12,11 @@ const planSchema = new mongoose.Schema({
 	  	default: Date.now
 	},
 	 name: {
-		type: String
+		type: String,
+		required: true
 	
 	},
-	 user: {
+	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
