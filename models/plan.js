@@ -11,7 +11,7 @@ const planSchema = new mongoose.Schema({
 		type: Date, 
 	  	default: Date.now
 	},
-	 name: {
+	name: {
 		type: String,
 		required: true
 	
@@ -20,11 +20,11 @@ const planSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
-	workouts: [{
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Workout'
-	}]
-	
+	// workouts: [{
+	// 	type: mongoose.Schema.Types.ObjectId,
+	// 	ref: 'Workout'
+	// }]
+	workouts: [Workout.schema]
 });
 
 const Plan = mongoose.model('Plan', planSchema)

@@ -83,12 +83,29 @@ router.post('/', async (req, res, next) => {
 							
 
 
-							newWorkout.activities.push(activitiesOfType[randomActivityNumber])
+							// newWorkout.activities.push(activitiesOfType[randomActivityNumber])
+							const a = activitiesOfType[randomActivityNumber]
+							//
+							console.log("\n here is a");
+							console.log(a);
+
+							const activity = {}
+							activity.name = a.name
+							activity.type = a.type
 							
+							if(a.quantity === null){
+								activity.duration = 30
+							}
+
+							if(a.duration === null){
+								activity.quantity = 30
+							}
+
+							newWorkout.activities.push(activity)
 
 						} // end of for loop that adds activities to workout
 						newWorkout.day = allDays[i]
-						await newWorkout.save()
+						// await newWorkout.save()
 						createdPlan.workouts.push(newWorkout)
 				} // end of if its MWF
 
@@ -98,28 +115,43 @@ router.post('/', async (req, res, next) => {
 
 
 			// find the current user (should be possible using session)
+			console.log("\nwe are trying to find the user based on session");
+			console.log("here is session:");
+			console.log(req.session);
 			const currentUser = await User.findById(req.session.userDbId)
-			console.log(currentUser);
 			
+			// console.log("\nhere's what (who?) we found: ");
+			// console.log(currentUser);
+			
+			// createdPlan.user = currentUser
 
-			createdPlan.user = currentUser
+			// console.log("\nwe just set user property on this plan we're about to save:");
+			// console.log(createdPlan);
+
 			await createdPlan.save();
+
+			console.log("\nwe just saved plan, here it is post save");
+			console.log(createdPlan);
 
 			// put the createdPlan onto the current user in correct place
 			currentUser.plans.push(createdPlan)
 
+			console.log("\nwe just pushed plan into user, here is user, which we are about to save");
+			console.log(currentUser);
 
 
-			console.log("*_*_*_*_*_*");
-			console.log("current user plans");
-			console.log(currentUser.plans);
-			console.log("*_*_*_*_*_*");
+			// console.log("\n*_*_*_*_*_*");
+			// console.log("current user plans");
+			// console.log(currentUser.plans);
+			// console.log("*_*_*_*_*_*");
 			// save current user 
 			await currentUser.save();
-			
 
-			console.log("\n here is the createdPlan")
-			console.log(createdPlan)
+			console.log("\nhere is currentUser after saving, if it worked, we can redirect now");
+			console.log(currentUser);			
+
+			// console.log("\n here is the createdPlan")
+			// console.log(createdPlan)
 
 			
 		
@@ -143,13 +175,13 @@ router.get('/:id', async (req, res, next) => {
 	try {
 		// query the database to find the plan with id equal to the req.params.id
 		const foundPlan = await Plan.findById(req.params.id)
-			.populate({
-				path: 'workouts',
-				populate: {
-						path: 'activities',
-						model: 'Activity'
-				}
-			});
+			// .populate({ // shouldn't need this since we switched to subdocs for this
+			// 	path: 'workouts',
+			// 	populate: {
+			// 			path: 'activities',
+			// 			model: 'Activity'
+			// 	}
+			// });
 	
 		
 		// (populate / do what you need to do)
@@ -157,9 +189,9 @@ router.get('/:id', async (req, res, next) => {
 		console.log("Here is the found plan: ")
 		console.log(foundPlan)
 
-		for (let i = 0; i < foundPlan.workouts.length; i++) {
-			console.log(foundPlan.workouts[i])
-		}
+		// for (let i = 0; i < foundPlan.workouts.length; i++) {
+		// 	console.log(foundPlan.workouts[i])
+		// }
 
 		res.render("show.ejs", {
 			// yourChosenName: data
@@ -272,19 +304,19 @@ router.get('/seed/data', async (req, res, next) => {
 		//cardio
 		{
 			type: "cardio",
-			duration: "30 minute",
+			duration: 90,
 			quantity: null,
 			name: "Run"
 		},
 		{
 			type: "cardio",
-			duration: "1 hr 30 minute",
+			duration: 90,
 			quantity: null, 
 			name: "Bike ride"
 		},
 		{
 			type: "cardio",
-			duration: "1 hr 30 minute",
+			duration: 90,
 			quantity: null, 
 			name: "Ellipitcal"
 		},
@@ -331,7 +363,7 @@ router.get('/seed/data', async (req, res, next) => {
 		
 
 	await Activities.create(activities)
-  	res.send('now there\'s some data')
+  	res.send('now there\'s some data <a href="/">Home</a>')
 })
 
 

@@ -9,11 +9,11 @@ const workoutSchema = new mongoose.Schema({
   day: {
   	type: Date
   },
-  activities: [{
-    type: mongoose.Schema.Types.ObjectId,
-		ref: 'Activities'
-  }]
-
+  // activities: [{
+  //   type: mongoose.Schema.Types.ObjectId,
+		// ref: 'Activities'
+  // }]
+  activities: [Activity.schema] // subdocuments
 
 
 
