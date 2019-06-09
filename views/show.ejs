@@ -13,11 +13,11 @@
                   <% for (let j = 0; j < plan.workouts[i].activities.length; j++) {%>
                     <% if(plan.workouts[i].activities[j].duration === null){%>
                       <li class="workout mb-3"><%=plan.workouts[i].activities[j].quantity%> <%=plan.workouts[i].activities[j].name%><br/>
-                        <a class="btn btn-primary" href="/shreddit/<%=plan.workouts[i].activities[j]._id%>/edit">Edit/Remove Activity</a>
+                        <a class="btn btn-primary" href="/shreddit/<%=plan._id%>/<%=plan.workouts[i]._id%>/<%=plan.workouts[i].activities[j]._id%>/edit">Edit/Remove Activity</a>
                     <% } %>
                     <% if(plan.workouts[i].activities[j].quantity === null) { %>
-                    <li class="workout mb-3"><%=plan.workouts[i].activities[j].duration%> <%=plan.workouts[i].activities[j].name%><br/>
-                      <a class="btn btn-primary" href="/shreddit/<%=plan.workouts[i].activities[j]._id%>/edit">Edit/Remove Activity</a>
+                    <li class="workout mb-3"><%=plan.workouts[i].activities[j].duration%> minute <%=plan.workouts[i].activities[j].name%><br/>
+                       <a class="btn btn-primary" href="/shreddit/<%=plan._id%>/<%=plan.workouts[i]._id%>/<%=plan.workouts[i].activities[j]._id%>/edit">Edit/Remove Activity</a>
                     <% } %>
                   <% } %>
                   <form action="/shreddit/<%=plan.workouts[i]._id%>?_method=DELETE" method="POST">

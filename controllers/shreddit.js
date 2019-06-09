@@ -165,7 +165,8 @@ router.get('/:id', async (req, res, next) => {
 
 		res.render("show.ejs", {
 			// yourChosenName: data
-			plan: foundPlan
+			plan: foundPlan,
+
 		})
 
 	} catch (err) {
@@ -178,20 +179,68 @@ router.get('/:id', async (req, res, next) => {
 //EDIT ACTIVITY
 // /:plan_id/:workout_id/:plan_id/edit -- will need new url's and approach to this
 
-router.get('/:id/edit/', async (req, res) => {
-	// getting this user's plan, taking 
-	// 
-	try {
-		foundWorkout = await Workout.findById(req.params.id)
-		foundActivity = await Activities.findById(foundWorkout.activities)
+router.get('/:plan_id/:workout_id/:activity_id/edit', async (req,res) => {
+	try{
+		let activityObject = {} 
+		console.log(req.params.plan_id);
+		console.log('===== Plan =======');
+		console.log(req.params.workout_id);
+		console.log('===== Workout =======');
+		console.log(req.params.activity_id);
+		console.log('===== Activity =======');
+
+		const foundPlanId = await req.params.plan_id
+		console.log(foundPlanId);
+		console.log('===== foundPlanId =======');
+
+		const foundWorkoutId = await req.params.workout_id
+		console.log(foundWorkoutId);
+		console.log('===== foundWorkoutId =======');
+
+		const foundActivityId = await req.params.activity_id
+		console.log(foundActivityId);
+		console.log('===== foundActivityId =======');
+
+		foundActivity = await Workout.collection.find({_id: foundActivityId})
+		console.log(foundActivity);
+		console.log('===== foundActivity =======');
+
+
+
+
+
+		// for(let i = 0; i < foundActivity.workouts.length; i++) {
+		// 	for(let j = 0; j < foundActivity.workouts[i].activities.length; i++){
+		// 		console.log(foundActivity.workouts[i].activities[j]);
+		// 	}	
+		// }
+
 		res.render('edit.ejs', {
-			activity: foundActivity,
-			workout: foundWorkout
+			planId: foundPlanId,
+			workoutId: foundWorkoutId,
+			activityId: foundActivityId,
+			activity: foundActivityId
+
 		})
-	} catch(err) {
+	} catch(err){
 		console.log(err);
 	}
 })
+
+// router.get('/:id/edit/', async (req, res) => {
+// 	// getting this user's plan, taking 
+// 	// 
+// 	try {
+// 		foundWorkout = await Workout.findById(req.params.id)
+// 		foundActivity = await Activities.findById(foundWorkout.activities)
+// 		res.render('edit.ejs', {
+// 			activity: foundActivity,
+// 			workout: foundWorkout
+// 		})
+// 	} catch(err) {
+// 		console.log(err);
+// 	}
+// })
 
 //UPDATE
 router.put('/:id', async (req, res) => {

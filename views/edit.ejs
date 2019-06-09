@@ -1,16 +1,21 @@
 <%- include ./partials/header2.ejs %>
 
 <h1>Edit your Workout Activity</h1>
+<br/>
 
 <h2><%=activity.name%></h2>
 <br/>
 	
 
-<form action="/shreddit/<%=workout._id%>?_method=PUT" method="POST">
-      Type: <input type="text" name="type" value="<%=activity.type%>"/><br/>
-      Duration: <input type="text" name="duration" value="<%=activity.duration%>"/><br/>
-      Quantity: <input type="text" name="quantity" value="<%=activity.quantity%>"/><br/>
-      Name: <input type="text" name="name" value="<%=activity.name%>"/><br/>
-      ID: <input readonly name='id' value="<%=activity.id%>"/><br/><br/>
+<form action="/shreddit/<%=planId%>/<%=workoutId%>/<%=activityId%>?_method=PUT" method="POST">
+	<%if(activity.quantity === null) {%>
+		Duration: <input type="text" name="duration" value="<%=activity.duration%>"/><br/>
+	<%}%><br/>
+
+	<%if(activity.duration === null) {%>
+		Quantity: <input type="text" name="quantity" value="<%=activity.quantity%>"/><br/>
+	<%}%><br/>
+      
 <button type="submit">Update Workout</button>
+<button type="submit">Delete Workout</button>
 </form>
