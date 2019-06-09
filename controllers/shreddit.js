@@ -146,21 +146,21 @@ router.get('/select-plan', (req, res) => {
 //PLAN SHOW
 router.get('/:id', async (req, res, next) => {
 	
-	console.log(req.params.id)
+	//console.log(req.params.id)
 
 	try {
 		// query the database to find the plan with id equal to the req.params.id
 		const foundPlan = await Plan.findById(req.params.id)
 
-		console.log("\nHere is the found plan: ")
-		console.log(foundPlan)
+		//console.log("\nHere is the found plan: ")*********
+		//console.log(foundPlan)*********
 
 
 			foundPlan.workouts.forEach((w, j) => {
-				console.log("\nworkout " + j + ": ");
+				//console.log("\nworkout " + j + ": ");****
 				w.activities.forEach((a, k) => {
-					console.log("activity " + k + ": ");
-					console.log(a);
+					//console.log("activity " + k + ": ");******
+					//console.log(a);********
 				})
 			})
 		
@@ -179,37 +179,23 @@ router.get('/:id', async (req, res, next) => {
 });
 
 //EDIT ACTIVITY
-// /:plan_id/:workout_id/:plan_id/edit -- will need new url's and approach to this
-
 router.get('/:plan_id/:workout_id/:activity_id/edit', async (req,res) => {
 	try{
 		
-		console.log(req.params.plan_id);
-		console.log('===== Plan =======');
-		console.log(req.params.workout_id);
-		console.log('===== Workout =======');
-		console.log(req.params.activity_id);
-		console.log('===== Activity =======');
-
-		// const foundPlanId = req.params.plan_id
-		// console.log(foundPlanId);
-		// console.log('===== foundPlanId =======');
-
-		// const foundWorkoutId = req.params.workout_id
-		// console.log(foundWorkoutId);
-		// console.log('===== foundWorkoutId =======');
-
-		// const foundActivityId = req.params.activity_id
-		// console.log(foundActivityId);
-		// console.log('===== foundActivityId =======');
+		// console.log(req.params.plan_id);
+		// console.log('===== Plan =======');
+		// console.log(req.params.workout_id);
+		// console.log('===== Workout =======');
+		// console.log(req.params.activity_id);
+		// console.log('===== Activity =======');
 
 		const foundPlan = await Plan.findById(req.params.plan_id)
-		console.log(foundPlan);
-		console.log("===== found plan ========");
+		// console.log(foundPlan);
+		// console.log("===== found plan ========");
 
 		const foundWorkout = await Workout.findById(req.params.workout_id)
-		console.log(foundWorkout);
-		console.log('===== found workout =======');
+		// console.log(foundWorkout);
+		// console.log('===== found workout =======');
 
 
 		let foundActivity = null;
@@ -220,8 +206,8 @@ router.get('/:plan_id/:workout_id/:activity_id/edit', async (req,res) => {
 			}
 		}
 
-		console.log(foundActivity)
-		console.log('===== found activity =======')
+		// console.log(foundActivity)
+		// console.log('===== found activity =======')
 
 		res.render('edit.ejs', {
 			planId: req.params.plan_id,
@@ -237,61 +223,79 @@ router.get('/:plan_id/:workout_id/:activity_id/edit', async (req,res) => {
 	}
 })
 
-// router.get('/:id/edit/', async (req, res) => {
-// 	// getting this user's plan, taking 
-// 	// 
-// 	try {
-// 		foundWorkout = await Workout.findById(req.params.id)
-// 		foundActivity = await Activity.findById(foundWorkout.activities)
-// 		res.render('edit.ejs', {
-// 			activity: foundActivity,
-// 			workout: foundWorkout
-// 		})
-// 	} catch(err) {
-// 		console.log(err);
-// 	}
-// })
 
-//UPDATE
-router.put('/:id', async (req, res) => {
+//UPDATE ACTIVITY-->WORKOUT-->PLAN
+router.put('/:plan_id/:workout_id/:activity_id', async (req, res) => {
 	try {
-		updatedActivity = {
-			type: req.body.type,
-			duration: req.body.duration,
-			quantity: req.body.quantity,
-			name: req.body.name
-		}
-		console.log('===============');
-		console.log(updatedActivity);
-		console.log('===============');
-		const plan = await Plan.findOne({workouts: req.params.id})
-		const foundWorkout = await Workout.findOne({activities: req.body.id})
-		const planActivityToUpdate = await Activity.findByIdAndUpdate(req.body.id, updatedActivity, {new: true})
-		plan.workouts.push(planActivityToUpdate)
-		console.log('===============');
-		console.log(planActivityToUpdate);
-		console.log('===============');
 
-		await planActivityToUpdate.save()
-		plan.workouts.splice(plan.workouts.findIndex((workouts) => {
-			return workouts.id === plan.workouts.id;
-		}),1,planActivityToUpdate);
-		await plan.save()
-		res.redirect('/shreddit/' + plan.id);
+		const foundPlan = await Plan.findById(req.params.plan_id)
+		console.log(foundPlan);
+		console.log("===== PUT found plan ========");
+
+		const foundWorkout = await Workout.findById(req.params.workout_id)
+		console.log(foundWorkout);
+		console.log('===== PUT found workout =======');
+
+	//UPDATE ACTIVITY
+		let indexOfActivityToUpdate = null;
+		let oldActivity = null;
+
+		for(let i = 0; i < foundWorkout.activities.length; i++){
+			if (foundWorkout.activities[i]._id.toString() === req.params.activity_id) {
+				indexOfActivityToUpdate = i
+				oldActivity = foundWorkout.activities[i]
+			}
+		}
+
+		//if (indexOfActivityToUpdate && oldActivity) {
+
+			const updatedActivity = oldActivity
+
+			console.log(oldActivity);
+			console.log('====PUT OLD ACTIVITY pre-update=====');
+
+			if(updatedActivity.duration) {
+				updatedActivity.duration = req.body.duration
+			}
+
+			if(updatedActivity.quantity) {
+				updatedActivity.quantity = req.body.quantity
+			}
+
+			foundWorkout.activities.splice(indexOfActivityToUpdate, 1, updatedActivity)
+
+			const newWorkout = await foundWorkout.save()
+
+			console.log(newWorkout);
+			console.log('====PUT found workout updated=====');
+		//}
+
+	//UPDATE WORKOUT & PLAN
+		let indexOfWorkoutToUpdate = null;
+		let oldWorkout = null;
+
+		for (let i = 0; i < foundPlan.workouts.length; i++) {
+			if(foundPlan.workouts[i]._id.toString() === req.params.plan_id) {
+				indexOfWorkoutToUpdate = i
+				oldWorkout = foundPlan.workouts[i]
+			}
+		}
+
+		//if (indexOfWorkoutToUpdate && oldWorkout) {
+
+			foundPlan.workouts.splice(indexOfWorkoutToUpdate, 1, newWorkout)
+
+			const newPlan = await foundPlan.save()
+
+			console.log(newPlan);
+			console.log('====PUT found plan updated=====');
+		//}
+
+		res.redirect('/shreddit/' + req.params.plan_id);
+
 	} catch(err) {
 		console.log(err);
 	}
-
-	// Plan.findOne({workouts: req.params.id}, (err, foundPlan) => {
-	// 	console.log('=====================');
-	// 	console.log(foundPlan.activities);
-	// 	console.log('=====================');
-	// 	Workout.findById({_id: req.params.id}, (err, foundWorkout) => {
-	// 		Activity.findOneAndUpdate(req.params.id, req.body, {new: true}, (err, updatedActivity)=>{
-	// 			res.redirect('/shreddit');
-	// 		})
-	// 	})
-	// });
 });
 
 //CREATE new activity
