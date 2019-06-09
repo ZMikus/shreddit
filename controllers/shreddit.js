@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/user');
 const Plan = require('../models/plan');
 const Workout = require('../models/workout');
-const Activities = require('../models/activities')
+const Activity = require('../models/activities')
 let userDbId = ''
 //
 router.get('/summary', async (req, res) => {
@@ -61,8 +61,8 @@ router.post('/', async (req, res, next) => {
 							// print the type of activity we should be generating
 							const typeOfActivity = prefs[j % prefs.length]
 							// console.log(typeOfActivity)
-							// const dayActivity = await Activities.find({name:typeOfActivity})
-							const activitiesOfType = await Activities.find({type: typeOfActivity})
+							// const dayActivity = await Activity.find({name:typeOfActivity})
+							const activitiesOfType = await Activity.find({type: typeOfActivity})
 							//console.log("activities of type " + typeOfActivity)
 							//console.log(activitiesOfType)
 							// once it correctly cycles thru -- and no sooner -- get a random activity for the type
@@ -94,8 +94,10 @@ router.post('/', async (req, res, next) => {
 							newWorkout.activities.push(activity)
 
 						} // end of for loop that adds activities to workout
+						
 						newWorkout.day = allDays[i]
-						// await newWorkout.save()
+						
+						await newWorkout.save()
 						createdPlan.workouts.push(newWorkout)
 				} // end of if its MWF
 
@@ -155,7 +157,7 @@ router.get('/:id', async (req, res, next) => {
 
 
 			foundPlan.workouts.forEach((w, j) => {
-				console.log("\nplan " + j + ": ");
+				console.log("\nworkout " + j + ": ");
 				w.activities.forEach((a, k) => {
 					console.log("activity " + k + ": ");
 					console.log(a);
@@ -181,7 +183,7 @@ router.get('/:id', async (req, res, next) => {
 
 router.get('/:plan_id/:workout_id/:activity_id/edit', async (req,res) => {
 	try{
-		let activityObject = {} 
+		
 		console.log(req.params.plan_id);
 		console.log('===== Plan =======');
 		console.log(req.params.workout_id);
@@ -189,37 +191,45 @@ router.get('/:plan_id/:workout_id/:activity_id/edit', async (req,res) => {
 		console.log(req.params.activity_id);
 		console.log('===== Activity =======');
 
-		const foundPlanId = await req.params.plan_id
-		console.log(foundPlanId);
-		console.log('===== foundPlanId =======');
+		// const foundPlanId = req.params.plan_id
+		// console.log(foundPlanId);
+		// console.log('===== foundPlanId =======');
 
-		const foundWorkoutId = await req.params.workout_id
-		console.log(foundWorkoutId);
-		console.log('===== foundWorkoutId =======');
+		// const foundWorkoutId = req.params.workout_id
+		// console.log(foundWorkoutId);
+		// console.log('===== foundWorkoutId =======');
 
-		const foundActivityId = await req.params.activity_id
-		console.log(foundActivityId);
-		console.log('===== foundActivityId =======');
+		// const foundActivityId = req.params.activity_id
+		// console.log(foundActivityId);
+		// console.log('===== foundActivityId =======');
 
-		foundActivity = await Workout.collection.find({_id: foundActivityId})
-		console.log(foundActivity);
-		console.log('===== foundActivity =======');
+		const foundPlan = await Plan.findById(req.params.plan_id)
+		console.log(foundPlan);
+		console.log("===== found plan ========");
+
+		const foundWorkout = await Workout.findById(req.params.workout_id)
+		console.log(foundWorkout);
+		console.log('===== found workout =======');
 
 
+		let foundActivity = null;
 
+		for(let i = 0; i < foundWorkout.activities.length; i++){
+			if (foundWorkout.activities[i]._id.toString() === req.params.activity_id) {
+				foundActivity = foundWorkout.activities[i]
+			}
+		}
 
-
-		// for(let i = 0; i < foundActivity.workouts.length; i++) {
-		// 	for(let j = 0; j < foundActivity.workouts[i].activities.length; i++){
-		// 		console.log(foundActivity.workouts[i].activities[j]);
-		// 	}	
-		// }
+		console.log(foundActivity)
+		console.log('===== found activity =======')
 
 		res.render('edit.ejs', {
-			planId: foundPlanId,
-			workoutId: foundWorkoutId,
-			activityId: foundActivityId,
-			activity: foundActivityId
+			planId: req.params.plan_id,
+			workoutId: req.params.workout_id,
+			activityId: req.params.activity_id,
+			activity: foundActivity,
+			workout: foundWorkout, 
+			plan: foundPlan
 
 		})
 	} catch(err){
@@ -232,7 +242,7 @@ router.get('/:plan_id/:workout_id/:activity_id/edit', async (req,res) => {
 // 	// 
 // 	try {
 // 		foundWorkout = await Workout.findById(req.params.id)
-// 		foundActivity = await Activities.findById(foundWorkout.activities)
+// 		foundActivity = await Activity.findById(foundWorkout.activities)
 // 		res.render('edit.ejs', {
 // 			activity: foundActivity,
 // 			workout: foundWorkout
@@ -246,7 +256,6 @@ router.get('/:plan_id/:workout_id/:activity_id/edit', async (req,res) => {
 router.put('/:id', async (req, res) => {
 	try {
 		updatedActivity = {
-			_id: req.body.id,
 			type: req.body.type,
 			duration: req.body.duration,
 			quantity: req.body.quantity,
@@ -257,7 +266,7 @@ router.put('/:id', async (req, res) => {
 		console.log('===============');
 		const plan = await Plan.findOne({workouts: req.params.id})
 		const foundWorkout = await Workout.findOne({activities: req.body.id})
-		const planActivityToUpdate = await Activities.findByIdAndUpdate(req.body.id, updatedActivity, {new: true})
+		const planActivityToUpdate = await Activity.findByIdAndUpdate(req.body.id, updatedActivity, {new: true})
 		plan.workouts.push(planActivityToUpdate)
 		console.log('===============');
 		console.log(planActivityToUpdate);
@@ -385,7 +394,7 @@ router.get('/seed/data', async (req, res, next) => {
 	]
 		
 
-	await Activities.create(activities)
+	await Activity.create(activities)
   	res.send('now there\'s some data <a href="/">Home</a>')
 })
 
