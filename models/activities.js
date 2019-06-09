@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const activitySchema = new mongoose.Schema({
-  type: {type: String, required: true},
+  type: {type: String},
   duration: {type: Number},
   quantity: {type: Number},
   name: {type: String, required: true}

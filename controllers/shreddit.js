@@ -181,22 +181,9 @@ router.get('/:id', async (req, res, next) => {
 //EDIT ACTIVITY
 router.get('/:plan_id/:workout_id/:activity_id/edit', async (req,res) => {
 	try{
-		
-		// console.log(req.params.plan_id);
-		// console.log('===== Plan =======');
-		// console.log(req.params.workout_id);
-		// console.log('===== Workout =======');
-		// console.log(req.params.activity_id);
-		// console.log('===== Activity =======');
-
 		const foundPlan = await Plan.findById(req.params.plan_id)
-		// console.log(foundPlan);
-		// console.log("===== found plan ========");
 
 		const foundWorkout = await Workout.findById(req.params.workout_id)
-		// console.log(foundWorkout);
-		// console.log('===== found workout =======');
-
 
 		let foundActivity = null;
 
@@ -205,9 +192,6 @@ router.get('/:plan_id/:workout_id/:activity_id/edit', async (req,res) => {
 				foundActivity = foundWorkout.activities[i]
 			}
 		}
-
-		// console.log(foundActivity)
-		// console.log('===== found activity =======')
 
 		res.render('edit.ejs', {
 			planId: req.params.plan_id,
@@ -247,8 +231,6 @@ router.put('/:plan_id/:workout_id/:activity_id', async (req, res) => {
 			}
 		}
 
-		//if (indexOfActivityToUpdate && oldActivity) {
-
 			const updatedActivity = oldActivity
 
 			console.log(oldActivity);
@@ -281,15 +263,12 @@ router.put('/:plan_id/:workout_id/:activity_id', async (req, res) => {
 			}
 		}
 
-		//if (indexOfWorkoutToUpdate && oldWorkout) {
-
 			foundPlan.workouts.splice(indexOfWorkoutToUpdate, 1, newWorkout)
 
 			const newPlan = await foundPlan.save()
 
 			console.log(newPlan);
 			console.log('====PUT found plan updated=====');
-		//}
 
 		res.redirect('/shreddit/' + req.params.plan_id);
 
@@ -298,13 +277,66 @@ router.put('/:plan_id/:workout_id/:activity_id', async (req, res) => {
 	}
 });
 
+//NEW
+router.get('/:plan_id/:workout_id/new', async (req, res) => {
+	try{
+		const foundPlan = await Plan.findById(req.params.plan_id)
+		console.log(foundPlan);
+		console.log("==== POST found plan ========");
+
+		const foundWorkout = await Workout.findById(req.params.workout_id)
+		console.log(foundWorkout);
+		console.log('===== POST found workout =======');
+
+
+		res.render('new.ejs', {
+			planId: req.params.plan_id,
+			workoutId: req.params.workout_id
+		})
+	} catch (err){
+		console.log(err);
+	}
+})
+
+
 //CREATE new activity
-router.post('/new', (req, res) => {
-	Activity.create(req.body, (err, createdActivity) => {
-		if(err){
-			res.send(err);
-		}else{
-			res.redirect('/shreddit');
+router.post('/:plan_id/:workout_id', async (req, res) => {
+	Activity.create(req.body, async (err, createdActivity) => {
+		try{
+			const foundPlan = await Plan.findById(req.params.plan_id)
+			console.log(foundPlan);
+			console.log("==== POST found plan ========");
+
+			const foundWorkout = await Workout.findById(req.params.workout_id)
+			console.log(foundWorkout);
+			console.log('===== POST found workout =======');
+
+			foundWorkout.activities.push(createdActivity)
+
+			const newWorkout = await foundWorkout.save()
+
+			console.log(newWorkout)
+			console.log('===== POST new workout =======')
+
+			let indexOfWorkoutToUpdate = null;
+			let oldWorkout = null;
+
+			for (let i = 0; i < foundPlan.workouts.length; i++) {
+				if(foundPlan.workouts[i]._id.toString() === req.params.plan_id) {
+					indexOfWorkoutToUpdate = i
+				}
+			}
+
+			foundPlan.workouts.splice(indexOfWorkoutToUpdate, 1, newWorkout)
+
+			const newPlan = await foundPlan.save()
+
+			console.log(newPlan)
+			console.log('===== POST new plan =======')
+
+			res.redirect('/shreddit/' + foundPlan._id);
+		} catch(err){
+			console.log(err);
 		}
 	})
 })

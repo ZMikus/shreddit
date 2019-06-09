@@ -1,9 +1,16 @@
-<%- include ./partials/header.ejs %>
-<form>
-<form action="/shreddit/<%=workout_id%>?_method=PUT" method="POST">
-      Type: <input type="text" name="name" value="<%=workout.type%>"/><br/>
-      Duration: <input type="text" name="color" value="<%=workout.duration%>"/><br/>
-      Quantity: <input type="text" name="color" value="<%=workout.quantity%>"/><br/>
-      Name: <input type="text" name="color" value="<%=workout.name%>"/><br/>
-<button type="submit">New Workout</button>
+<%- include ./partials/header2.ejs %>
+
+<form action="/shreddit/<%=planId%>/<%=workoutId%>?_method=POST" method="POST">
+	Name: <input type="text" name="name" value=""/><br/>
+    Type: <select name="choice">
+      	<option value="weights">Weights</option>
+      	<option value="plyos">Plyometrics</option>
+      	<option value="cardio">Cardiovascular</option>
+      </select>
+      <br/>
+    Duration: <input type="text" name="duration" placeholder="Minutes" value=""/>
+    <h4>Or:</h4>
+    Quantity: <input type="text" name="quantity" placeholder="Reps" value=""/><br/>
+      
+<button type="submit">Add New Activity</button>
 </form>
