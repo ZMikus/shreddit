@@ -20,7 +20,7 @@
                        <a class="btn btn-primary" href="/shreddit/<%=plan._id%>/<%=plan.workouts[i]._id%>/<%=plan.workouts[i].activities[j]._id%>/edit">Edit/Remove Activity</a>
                     <% } %>
                   <% } %>
-                  <form action="/shreddit/<%=plan.workouts[i]._id%>?_method=DELETE" method="POST">
+                  <form action="/shreddit/<%=plan._id%>/<%=plan.workouts[i]._id%>?_method=DELETE" method="POST">
                     <button class="btn btn-danger" type="submit">Completed Workout</button>
                     <a class="btn btn-success" href="/shreddit/<%=plan._id%>/<%=plan.workouts[i]._id%>/new">Add an Activity</a>
                 </form>     

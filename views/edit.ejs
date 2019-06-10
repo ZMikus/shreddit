@@ -17,6 +17,9 @@
 		Quantity: <input type="text" name="quantity" value="<%=activity.quantity%>"/><br/>
 	<%}%><br/>
       
-<button type="submit">Update Workout</button>
-<button type="submit">Delete Workout</button>
+	<button type="submit">Update Workout</button>
+</form>
+
+<form action="/shreddit/<%=plan._id%>/<%=workoutId%>/<%=activityId%>?_method=DELETE" method="POST">
+	<button type="submit">Delete Workout</button>
 </form>

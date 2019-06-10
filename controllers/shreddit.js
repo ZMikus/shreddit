@@ -80,14 +80,18 @@ router.post('/', async (req, res, next) => {
 							const activity = {}
 							activity.name = a.name
 							activity.type = a.type
+
+							const durationAmt = (Math.floor(Math.random() * (120 - 45)) + 45)
 							
 							if(a.quantity === null){
-								activity.duration = 30
+								activity.duration = (Math.round(durationAmt / 5) * 5)
 								activity.quantity = null
 							}
 
+							const quantityAmt = (Math.floor(Math.random() * (60 - 30)) + 30)
+
 							if(a.duration === null){
-								activity.quantity = 30
+								activity.quantity = (Math.round(quantityAmt / 5) * 5);
 								activity.duration = null
 							}
 
@@ -343,26 +347,59 @@ router.post('/:plan_id/:workout_id', async (req, res) => {
 
 
 
-//DESTROY Workout
-router.delete('/:id', (req, res, next) => {
-	console.log('HIT THE DELETE ROUTE')
-	Plan.findOne({workouts: req.params.id}, (err, foundPlan) => {
-		console.log(foundPlan);
-		Workout.findById({_id: req.params.id}, (err, foundWorkout) =>{
-			
-			Workout.deleteOne({_id: req.params.id}, (err, deletedWorkout) => {
-				console.log(req.params.id)
-				if(err){
-					next(err)
-				}else{
-					console.log(deletedWorkout)
-				res.redirect('/shreddit/' + foundPlan._id)
-				}				
-			})
-		
-		})
+//DESTROY Activity
+router.delete('/:plan_id/:workout_id', async (req, res) => {
+	Activity.findByIdAndRemove(req.params.id, async (err, deletedActivity) => {
+
+		console.log('HIT THE DELETE ROUTE')
+		try{
+			const foundPlan = await Plan.findById(req.params.plan_id)
+				console.log(foundPlan);
+
+			const foundWorkout = await Workout.findById(req.params.workout_id)
+				console.log(foundWorkout)
+
+			let indexOfActivityToDelete = null;
+			let deletedActivities = [];
+
+			for(let i = 0; i < foundWorkout.activities.length; i++){
+				if (foundWorkout.activities[i].id_toString() === req.params.activity_id){
+					indexOfActivityToDelete = i
+					foundActivity = foundWorkout.activities[i]
+				}
+			}
+
+			deletedActivities.push(foundActivity);
+
+			foundWorkout.activities.splice(indexOfActivityToDelete, 1)
+
+			const newWorkout = await foundWorkout.save()
+
+			console.log(newWorkout);
+
+			res.redirect('/shreddit/' + req.params.plan_id)
+
+		} catch (err){
+
+		}
 	})
 });			
+//V1 DELETE
+	//})
+	// // Plan.findOne({workouts: req.params.id}, (err, foundPlan) => {
+	// // 	console.log(foundPlan);
+	// 	Workout.findById({_id: req.params.id}, (err, foundWorkout) =>{
+			
+	// 		Workout.deleteOne({_id: req.params.id}, (err, deletedWorkout) => {
+	// 			console.log(req.params.id)
+	// 			if(err){
+	// 				next(err)
+	// 			}else{
+	// 				console.log(deletedWorkout)
+	// 			res.redirect('/shreddit/' + req.params.plan_id)
+	// 			}				
+	// 		//})
+	// 	})
 		
 
 
@@ -388,6 +425,24 @@ router.get('/seed/data', async (req, res, next) => {
 			quantity: null, 
 			name: "Ellipitcal"
 		},
+		{
+			type: "cardio",
+			duration: 90,
+			quantity: null, 
+			name: "Jump Rope"
+		},
+		{
+			type: "cardio",
+			duration: 90,
+			quantity: null, 
+			name: "Stair Master"
+		},
+		{
+			type: "cardio",
+			duration: 90,
+			quantity: null, 
+			name: "Kettlebells"
+		},
 		//plyo
 		{
 			type: "plyos",
@@ -405,8 +460,28 @@ router.get('/seed/data', async (req, res, next) => {
 			type: "plyos",
 			duration: null,
 			quantity: 50,
-			name: "Super Mans"
+			name: "Bounding"
 		},
+		{
+			type: "plyos",
+			duration: null,
+			quantity: 50,
+			name: "Box Jumps"
+		},
+		{
+			type: "plyos",
+			duration: null,
+			quantity: 50,
+			name: "Plyo Pushups"
+		},
+		{
+			type: "plyos",
+			duration: null,
+			quantity: 50,
+			name: "Depth Jumps"
+		},
+
+
 		//weights
 		{
 			type: "weights",
@@ -426,7 +501,30 @@ router.get('/seed/data', async (req, res, next) => {
 			quantity: 20,
 			name: "Squat"
 		},
-		
+		{
+			type: "weights",
+			duration: null,
+			quantity: 20,
+			name: "Back Squat"
+		},
+		{
+			type: "weights",
+			duration: null,
+			quantity: 20,
+			name: "Overhead Press"
+		},
+		{
+			type: "weights",
+			duration: null,
+			quantity: 20,
+			name: "Dumbbell Bench Press"
+		},
+		{
+			type: "weights",
+			duration: null,
+			quantity: 20,
+			name: "Diamond Press-Up"
+		}
 	]
 		
 
