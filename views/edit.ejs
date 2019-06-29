@@ -2,9 +2,9 @@
 
 <h1>Edit your Workout Activity</h1>
 <br/>
-
+<h3><%=workout.day%></h3> <br/>
 <h2><%=activity.name%></h2>
-<h3><%=workout.day%></h3>
+
 <br/>
 	
 
@@ -20,6 +20,6 @@
 	<button type="submit">Update Workout</button>
 </form>
 
-<form action="/shreddit/<%=plan._id%>/<%=workoutId%>/<%=activityId%>?_method=DELETE" method="POST">
+<form action="/shreddit/<%=planId%>/<%=workoutId%>/<%=activityId%>?_method=DELETE" method="POST">
 	<button type="submit">Delete Workout</button>
 </form>

@@ -5,7 +5,8 @@ const Plan = require('../models/plan');
 const Workout = require('../models/workout');
 const Activity = require('../models/activities')
 let userDbId = ''
-//
+
+//SHOW Summary Page
 router.get('/summary', async (req, res) => {
 	try {
 		const userDbId = req.session.userDbId
@@ -81,10 +82,10 @@ router.post('/', async (req, res, next) => {
 							activity.name = a.name
 							activity.type = a.type
 
-							const durationAmt = (Math.floor(Math.random() * (120 - 45)) + 45)
+							const durationAmt = (Math.floor(Math.random() * (120 - 30)) + 30)
 							
 							if(a.quantity === null){
-								activity.duration = (Math.round(durationAmt / 5) * 5)
+								activity.duration = (Math.round(durationAmt / 10) * 10)
 								activity.quantity = null
 							}
 
@@ -261,8 +262,10 @@ router.put('/:plan_id/:workout_id/:activity_id', async (req, res) => {
 		let oldWorkout = null;
 
 		for (let i = 0; i < foundPlan.workouts.length; i++) {
-			if(foundPlan.workouts[i]._id.toString() === req.params.plan_id) {
+			if(foundPlan.workouts[i]._id.toString() === req.params.workout_id) {
 				indexOfWorkoutToUpdate = i
+				console.log('hitting the indexOfWorkoutToUpdate loop');
+				console.log(indexOfWorkoutToUpdate);
 				oldWorkout = foundPlan.workouts[i]
 			}
 		}
@@ -348,42 +351,128 @@ router.post('/:plan_id/:workout_id', async (req, res) => {
 
 
 //DESTROY Activity
-router.delete('/:plan_id/:workout_id', async (req, res) => {
+router.delete('/:plan_id/:workout_id/:activity_id', async (req, res) => {
 	Activity.findByIdAndRemove(req.params.id, async (err, deletedActivity) => {
 
-		console.log('HIT THE DELETE ROUTE')
+		console.log('YOU HIT THE DELETE ROUTE')
 		try{
 			const foundPlan = await Plan.findById(req.params.plan_id)
-				console.log(foundPlan);
+				//console.log(foundPlan);
 
 			const foundWorkout = await Workout.findById(req.params.workout_id)
 				console.log(foundWorkout)
 
 			let indexOfActivityToDelete = null;
-			let deletedActivities = [];
+			let foundActivity = null;
+			let newWorkout = null;
 
 			for(let i = 0; i < foundWorkout.activities.length; i++){
-				if (foundWorkout.activities[i].id_toString() === req.params.activity_id){
+				if (foundWorkout.activities[i]._id.toString() === req.params.activity_id){
 					indexOfActivityToDelete = i
 					foundActivity = foundWorkout.activities[i]
+					console.log("this is the found activity");
+					console.log(foundActivity);
+					foundWorkout.activities.splice(indexOfActivityToDelete, 1)
+					newWorkout = await foundWorkout.save()
+					
+
 				}
 			}
 
-			deletedActivities.push(foundActivity);
+		//UPDATE WORKOUT & PLAN
+			let indexOfWorkoutToUpdate = null;
+			let oldWorkout = null;
 
-			foundWorkout.activities.splice(indexOfActivityToDelete, 1)
+			for (let i = 0; i < foundPlan.workouts.length; i++) {
+				if(foundPlan.workouts[i]._id.toString() === req.params.workout_id) {
+					indexOfWorkoutToUpdate = i
+					oldWorkout = foundPlan.workouts[i]
+				}
+			}
 
-			const newWorkout = await foundWorkout.save()
+			foundPlan.workouts.splice(indexOfWorkoutToUpdate, 1, newWorkout)
 
+			const newPlan = await foundPlan.save()
+
+			console.log(newPlan);
+
+			
+
+			console.log('this is the new workout yo');
 			console.log(newWorkout);
+
+			console.log('this is the new plan');
+			console.log(newPlan);
 
 			res.redirect('/shreddit/' + req.params.plan_id)
 
 		} catch (err){
-
+			console.log(err);
 		}
 	})
-});			
+});
+
+//DESTROY(aka complete) Workout
+router.delete('/:plan_id/:workout_id', async (req, res) => {
+	Workout.findByIdAndRemove(req.params.id, async (err, deletedWorkout) => {
+		console.log("completed workout route hit");
+		try{
+			const foundPlan = await Plan.findById(req.params.plan_id)
+				//console.log(foundPlan);
+
+			const foundWorkout = await Workout.findById(req.params.workout_id)
+				console.log(foundWorkout)
+
+			let indexOfWorkoutToDelete = null;
+			let completedWorkout = null;
+			let newWorkout = null;
+
+			for(let i = 0; i < foundWorkout.length; i++){
+				if (foundWorkout[i]._id.toString() === req.params.workout_id){
+					indexOfWorkoutToDelete = i
+					completedWorkout = foundWorkout[i]
+					console.log("this is the found activity");
+					console.log(foundActivity);
+					foundWorkout.splice(indexOfWorkoutToDelete, 1)
+					//newWorkout = await foundWorkout.save()
+				}
+			}
+
+		//UPDATE WORKOUT & PLAN
+			let indexOfPlanToUpdate = null;
+			let oldPlan = null;
+
+			for (let i = 0; i < foundPlan.length; i++) {
+				if(foundPlan[i]._id.toString() === req.params.plan_id) {
+					indexOfPlanToUpdate = i
+					oldPlan = foundPlan[i]
+				}
+			}
+
+			//foundPlan.workouts.splice(indexOfWorkoutToUpdate, 1, newWorkout)
+
+			const newPlan = await foundPlan.save()
+
+			console.log(newPlan);
+
+			
+
+			console.log('this is the new workout yo');
+			console.log(newWorkout);
+
+			console.log('this is the new plan');
+			console.log(newPlan);
+
+			res.redirect('/shreddit/' + req.params.plan_id)
+
+		}catch(err){
+			console.log(err);
+		}
+	})
+});
+
+
+
 //V1 DELETE
 	//})
 	// // Plan.findOne({workouts: req.params.id}, (err, foundPlan) => {
@@ -398,7 +487,7 @@ router.delete('/:plan_id/:workout_id', async (req, res) => {
 	// 				console.log(deletedWorkout)
 	// 			res.redirect('/shreddit/' + req.params.plan_id)
 	// 			}				
-	// 		//})
+
 	// 	})
 		
 
@@ -487,50 +576,53 @@ router.get('/seed/data', async (req, res, next) => {
 			type: "weights",
 			duration: null,
 			quantity: 15,
-			name: "Bench Press"
+			name: "Bench Presses"
 		},
 		{
 			type: "weights",
 			duration: null,
 			quantity: 15,
-			name: "Military Press"
+			name: "Military Presses"
 		},
 		{
 			type: "weights",
 			duration: null,
 			quantity: 20,
-			name: "Squat"
+			name: "Squats"
 		},
 		{
 			type: "weights",
 			duration: null,
 			quantity: 20,
-			name: "Back Squat"
+			name: "Back Squats"
 		},
 		{
 			type: "weights",
 			duration: null,
 			quantity: 20,
-			name: "Overhead Press"
+			name: "Overhead Presses"
 		},
 		{
 			type: "weights",
 			duration: null,
 			quantity: 20,
-			name: "Dumbbell Bench Press"
+			name: "Dumbbell Bench Presses"
 		},
 		{
 			type: "weights",
 			duration: null,
 			quantity: 20,
-			name: "Diamond Press-Up"
+			name: "Diamond Press-Ups"
 		}
 	]
 		
 
 	await Activity.create(activities)
   	res.send('now there\'s some data <a href="/">Home</a>')
-})
+});
 
 
 module.exports = router;
+
+
+
