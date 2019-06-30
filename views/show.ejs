@@ -9,7 +9,7 @@
 
         <ul>
           <% for (let i = 0; i < plan.workouts.length; i++) {%>
-              <h4 class="mb-3 mt-3"><%=plan.workouts[i].day%></h4>
+              <h2 class="mb-3 mt-3"><%=plan.workouts[i].day.toDateString()%></h2>
                   <% for (let j = 0; j < plan.workouts[i].activities.length; j++) {%>
                     <% if(plan.workouts[i].activities[j].duration === null){%>
                       <li class="workout mb-3"><%=plan.workouts[i].activities[j].quantity%> <%=plan.workouts[i].activities[j].name%><br/>

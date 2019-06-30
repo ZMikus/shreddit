@@ -23,15 +23,11 @@ router.post('/register', async (req, res) => {
 
 	const password = req.body.password;
 	const passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-	console.log('this is req.session');
-	console.log(req.session);
 	
 	const userDbEntry = {};
 	userDbEntry.email = req.body.email;
 	userDbEntry.password = passwordHash;
 	userDbEntry.name = req.body.name;
-	
-
 
 	try{
 
@@ -61,11 +57,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res, next) => {
 
 	try{
-		console.log('\nreq.body in login route:');
 		const foundUser = await User.findOne({email: req.body.email}).populate('plan');
-
-		console.log("\n here's the foundUser, should not be null");
-		console.log(foundUser);
 
 		if(foundUser){
 			if(bcrypt.compareSync(req.body.password, foundUser.password) === true){
@@ -74,25 +66,18 @@ router.post('/login', async (req, res, next) => {
 				req.session.logged = true;
 				req.session.userDbId = foundUser.id;
 				req.session.name = req.body.name;
-				
-				console.log(req.session, 'successful login');
+
 				res.redirect('/shreddit/summary');
 
 			}else{
 				req.session.message = "Incorrect Username/Password";
-				console.log('login failed'. req.session.username);
-				res.redirect('/')
+				console.log('login failed', req.session.username);
+				res.redirect('/auth/login')
 			}
-		}else{
-			req.session.message = "Incorrect Username/Password";
-
-			res.redirect('/');
-			console.log('login failed');
 		}
-		
 
 	}catch(err){
-		next(err)
+		next(err)	
 	}
 });
 
@@ -108,6 +93,6 @@ router.get('/logout', (req, res) => {
 			console.log('user logged out');
 		}
 	})		
-})
-module.exports = router;
+});
 
+module.exports = router;

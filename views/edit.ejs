@@ -2,7 +2,7 @@
 
 <h1>Edit your Workout Activity</h1>
 <br/>
-<h3><%=workout.day%></h3> <br/>
+<h3><%=workout.day.toDateString()%></h3> <br/>
 <h2><%=activity.name%></h2>
 
 <br/>
@@ -17,9 +17,9 @@
 		Quantity: <input type="text" name="quantity" value="<%=activity.quantity%>"/><br/>
 	<%}%><br/>
       
-	<button type="submit">Update Workout</button>
+	<button type="submit">Update Activity</button>
 </form>
 
 <form action="/shreddit/<%=planId%>/<%=workoutId%>/<%=activityId%>?_method=DELETE" method="POST">
-	<button type="submit">Delete Workout</button>
+	<button type="submit">Delete Activity</button>
 </form>
