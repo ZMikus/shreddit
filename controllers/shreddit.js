@@ -44,6 +44,7 @@ router.post('/', async (req, res, next) => {
 			for(let i = 0; i < 27; i++){
 				// create the next date object -- 1 day after the last element in allDays
 				const newDate = new Date(allDays[i].getTime() + (24 * 60 * 60 * 1000))
+				// const stringDate = newDate.toDateString();
 				allDays.push(newDate)
 			};
 			
@@ -53,6 +54,9 @@ router.post('/', async (req, res, next) => {
 					if(allDays[i].getDay() === 1 || allDays[i].getDay() === 3 || allDays[i]
 					.getDay() === 5) {
 						// create a new blank workout
+
+
+
 						const newWorkout = new Workout
 						// build the workout
 						for(let j = 0; j < howManyActivitiesYouWant; j++) { 
@@ -100,7 +104,7 @@ router.post('/', async (req, res, next) => {
 
 						} // end of for loop that adds activities to workout
 						
-						newWorkout.day = allDays[i]
+						newWorkout.day = allDays[i].toDateString();
 						
 						await newWorkout.save()
 						createdPlan.workouts.push(newWorkout)
@@ -421,20 +425,21 @@ router.delete('/:plan_id/:workout_id', async (req, res) => {
 				//console.log(foundPlan);
 
 			const foundWorkout = await Workout.findById(req.params.workout_id)
-				console.log(foundWorkout)
+				//console.log(foundWorkout)
 
 			let indexOfWorkoutToDelete = null;
 			let completedWorkout = null;
 			let newWorkout = null;
 
-			for(let i = 0; i < foundWorkout.length; i++){
-				if (foundWorkout[i]._id.toString() === req.params.workout_id){
+			for(let i = 0; i < foundPlan.workouts.length; i++){
+				if (foundPlan.workouts[i]._id.toString() === req.params.workout_id){
 					indexOfWorkoutToDelete = i
 					completedWorkout = foundWorkout[i]
-					console.log("this is the found activity");
-					console.log(foundActivity);
-					foundWorkout.splice(indexOfWorkoutToDelete, 1)
-					//newWorkout = await foundWorkout.save()
+					console.log("hitting the found workout loop");
+					foundPlan.workouts.splice(indexOfWorkoutToDelete, 1)
+					newWorkout = await foundWorkout.save()
+					console.log('**this is the new workout');
+					console.log(newWorkout);
 				}
 			}
 
@@ -446,19 +451,11 @@ router.delete('/:plan_id/:workout_id', async (req, res) => {
 				if(foundPlan[i]._id.toString() === req.params.plan_id) {
 					indexOfPlanToUpdate = i
 					oldPlan = foundPlan[i]
+					foundPlan.splice(i, 1)
 				}
 			}
 
-			//foundPlan.workouts.splice(indexOfWorkoutToUpdate, 1, newWorkout)
-
 			const newPlan = await foundPlan.save()
-
-			console.log(newPlan);
-
-			
-
-			console.log('this is the new workout yo');
-			console.log(newWorkout);
 
 			console.log('this is the new plan');
 			console.log(newPlan);
