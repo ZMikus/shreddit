@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile:sass": "node-sass sass/main.scss public/css/style.comp.css",
     "build:css": "npm-run-all compile:sass concat:css prefix:css compress:css",
-    "scss": "node-sass --watch scss -o css"
+    "scss": "node-sass --watch scss -o css",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
